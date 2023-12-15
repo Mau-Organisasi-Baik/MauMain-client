@@ -6,6 +6,8 @@ import { Button } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import CategoryFilter from '../components/CategoryFilter';
 import ChatComponent from '../screens/Chat';
+import { Inbox } from '../screens/Inbox';
+
 
 const Tab = createBottomTabNavigator();
 
@@ -33,7 +35,7 @@ export const MyTabs = () => {
 
       <Tab.Screen 
        name="Inbox"
-       component={ChatComponent}
+       component={Inbox}
        options={{
         headerShown: false,
         tabBarIcon: ({ focused, color, size }) => {
