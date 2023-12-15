@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, Image } from 'react-native';
 
-
 const Card = () => {
     return (
       <View className={`px-4 w-5/6 mx-auto mt-8 rounded-lg bg-white shadow-lg`}>
@@ -10,12 +9,10 @@ const Card = () => {
           <View className={`flex-1 justify-center`}>
             <Text className={`text-lg`}>AkunBaik123 telah mengundangmu 
             </Text>
-            {/* Additional text or elements can go here */}
           </View>
         </View>
       </View>
     );
   };
   
-
 export default Card;

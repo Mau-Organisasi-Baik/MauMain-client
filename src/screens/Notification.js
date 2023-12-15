@@ -7,18 +7,6 @@ const NotificationPopup = ({ visible, onRequestClose }) => {
   <>
   <ScrollView>
   <Card/>
-  <Card/>
-  <Card/>
-  <Card/>
-  <Card/>
-  <Card/>
-  <Card/>
-  <Card/>
-  <Card/>
-  <Card/>
-  <Card/>
-  <Card/>
-  <Card/>
   </ScrollView>
   </>
   )
