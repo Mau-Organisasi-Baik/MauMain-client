@@ -1,6 +1,7 @@
 
 import MapView, {Marker} from 'react-native-maps'
-
+import {useState} from 'react'
+import BottomDrawer from '../components/ModalSwipeUp'
 const customMapStyle = [
   {
     "featureType": "poi",
@@ -14,6 +15,7 @@ const customMapStyle = [
 ]
 
 export const Explore = () => {
+  const [isDrawerVisible, setIsDrawerVisible] = useState(false)
     return (
         <>
    <MapView
@@ -28,6 +30,7 @@ export const Explore = () => {
       customMapStyle={customMapStyle}
     >
       <Marker
+      onPress={() => setIsDrawerVisible(true)}
         coordinate={{
           latitude: -6.2607187,
           longitude: 106.7816162,
@@ -36,6 +39,7 @@ export const Explore = () => {
         description={"Cuma tes doang bang!"}
       />
     </MapView>
+   {isDrawerVisible && <BottomDrawer isDrawerOpen={isDrawerVisible} setIsDrawerOpen={setIsDrawerVisible}/>}
    
         </>
     )
