@@ -15,13 +15,13 @@ export const StackNavigator = () => {
       <Stack.Navigator>
         {/* Di StackScreen MainScreen nanti dimainin perkondisian
         di componentnya kalau si user ini admin atau engga */}
-          <Stack.Screen 
+          {/* <Stack.Screen 
             name='Admin Screen'
             component={AdminBottomTab}
             options={{
               headerShown: false,
             }}
-            />
+            /> */}
         <Stack.Screen 
           name='Main Screen'
           component={MyTabs}
