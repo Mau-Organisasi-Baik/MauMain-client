@@ -1,13 +1,12 @@
 import React from 'react';
 import { Text, TextInput, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Link, useNavigation, useRoute } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 
-const AuthForm = () => {
+const AuthForm = ({navigation}) => {
     const {name} = useRoute()
     const loginScreen = (name === 'Login')
     const registerScreen = (name === 'Register')
-    const navigation = useNavigation()
   return (
     <LinearGradient
       colors={['#003366', '#66CCFF']}
@@ -34,7 +33,7 @@ const AuthForm = () => {
         className="text-white text-base mb-4 px-2 py-2 border-b border-white rounded-md"
       />
       
-      <TouchableOpacity className="border border-white py-2 rounded-full mt-4">
+      <TouchableOpacity onPress={()=>navigation.navigate('Main Screen')} className="border border-white py-2 rounded-full mt-4">
         <Text className="text-white text-center py-2 text-xl tracking-wider font-semibold">{registerScreen ? 'SIGN UP' : 'LOG IN'}</Text>
       </TouchableOpacity>
       

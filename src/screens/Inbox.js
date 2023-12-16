@@ -10,7 +10,7 @@ export const Inbox = () => {
   return (
     <TopTab.Navigator
       initialRouteName="Notification"
-      className="mt-14"
+      className=""
       screenOptions={{
         tabBarActiveTintColor: 'blue',
         tabBarLabelStyle: { fontSize: 12 },
