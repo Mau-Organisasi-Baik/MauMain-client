@@ -13,9 +13,10 @@ export const BookModal = ({modalVisible, setModalVisible}) => {
         visible={modalVisible}
         onRequestClose={() => setModalVisible(!modalVisible)}
       >
-        <View className={`m-4 bg-red-500 mt-56 rounded-lg p-4 shadow-lg`}>
+        <View className={`m-4 bg-white border-2 border-black mt-20 rounded-lg p-4 shadow-xl`}>
           <Text className="text-lg">Tipe Olahraga : </Text>
         <Picker
+            style={{ backgroundColor: '#f0f0f0' }}
             className="bg-yellow-500"
             selectedValue={selectedSport}
             >
@@ -28,13 +29,14 @@ export const BookModal = ({modalVisible, setModalVisible}) => {
 
           <Text className="text-lg">Jam : </Text>
           <TextInput
-          className="bg-blue-500 w-1/2 text-center rounded-xl"
+          style={{ backgroundColor: '#f0f0f0' }}
+          className="bg-grey-800 pl-2 py-3"
           value='15:00 - 16:00'
           />
           <Text className="text-lg">Mode : </Text>
 
         <Picker
-            className="bg-yellow-500"
+            style={{ backgroundColor: '#f0f0f0' }}
             selectedValue={selectedMode}
             >
             <Picker.Item label='Casual' value={'casual'}/>
