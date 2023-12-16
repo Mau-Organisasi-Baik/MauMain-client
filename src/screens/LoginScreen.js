@@ -2,7 +2,7 @@ import React from 'react';
 import { Text, TextInput, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
-const SignInScreen = () => {
+const SignInScreen = ({navigation}) => {
   return (
     <LinearGradient
       colors={['#003366', '#66CCFF']}

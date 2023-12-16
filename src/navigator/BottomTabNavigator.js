@@ -37,10 +37,8 @@ export const MyTabs = () => {
        name="Inbox"
        component={Inbox}
        options={{
-        headerShown: false,
         tabBarIcon: ({ focused, color, size }) => {
-          let iconName = focused ? 'file-tray' : 'file-tray-outline'; // Use the appropriate icon names
-          // You can return any component that you like here
+          let iconName = focused ? 'file-tray' : 'file-tray-outline'; 
           return <Ionicons name={iconName} size={size} color={color} />;
         },
       }} />
@@ -50,8 +48,7 @@ export const MyTabs = () => {
        options={{
         headerShown: false,
         tabBarIcon: ({ focused, color, size }) => {
-          let iconName = focused ? 'person' : 'person-outline'; // Use the appropriate icon names
-          // You can return any component that you like here
+          let iconName = focused ? 'person' : 'person-outline';
           return <Ionicons name={iconName} size={size} color={color} />;
         }
       }} />

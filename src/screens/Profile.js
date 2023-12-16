@@ -1,9 +1,9 @@
 import { LinearGradient } from "expo-linear-gradient"
-import { Image, Text } from "react-native"
+import { Button, Image, Text } from "react-native"
 import { XPBar } from "../components/XPBar"
 import { HistoryScroll } from "../components/HistoryScroll"
 
-export const Profile = () => {
+export const Profile = ({navigation}) => {
     return (
         <>
     <LinearGradient
@@ -14,6 +14,7 @@ export const Profile = () => {
       <Text className={`text-white text-center text-2xl mt-4`}>BOOM_ANAKBAIX</Text>
       <XPBar />
      <HistoryScroll/>
+     <Button onPress={() => navigation.navigate('Login')} title="Logout"/>
     </LinearGradient>
         </>
     )

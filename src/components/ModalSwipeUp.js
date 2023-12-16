@@ -1,9 +1,10 @@
+import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useRef } from 'react';
 import { ScrollView, Animated,Image, View, Text, TouchableOpacity } from 'react-native';
 
 const BottomDrawer = ({ isDrawerOpen, setIsDrawerOpen }) => {
   const drawerHeight = useRef(new Animated.Value(0)).current; // Initial height for the drawer
-
+  const navigation = useNavigation()
   useEffect(() => {
     if (isDrawerOpen) {
       Animated.spring(drawerHeight, { toValue: 500, useNativeDriver: false }).start();
@@ -30,7 +31,7 @@ const BottomDrawer = ({ isDrawerOpen, setIsDrawerOpen }) => {
         <Text className=" text-xl font-bold">Lapangan Pomad, Pancoran, DKI JAKARTA</Text>
         <Text className=" bg-red-200 w-3/12 text-center my-2 rounded-lg">Sepak Bola</Text>
         <View className=" my-4">
-            <TouchableOpacity className="bg-blue-500 px-14 py-2  rounded-lg">
+            <TouchableOpacity onPress={()=> navigation.navigate('Reservation Card')} className="bg-blue-500 px-14 py-2  rounded-lg">
                 <Text className="text-lg text-center tracking-wider">Book Now</Text>
             </TouchableOpacity>
           
