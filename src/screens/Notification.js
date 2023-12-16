@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Button, Modal, StyleSheet, Image, ScrollView } from 'react-native';
+import { ScrollView } from 'react-native';
 import Card from '../components/Card';
 
 const NotificationPopup = ({ visible, onRequestClose }) => {
