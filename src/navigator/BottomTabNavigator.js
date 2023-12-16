@@ -1,12 +1,12 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Explore } from '../screens/Explore';
 import SignInScreen from '../screens/LoginScreen';
-import { Button } from 'react-native';
 
 import { Ionicons } from '@expo/vector-icons';
 import CategoryFilter from '../components/CategoryFilter';
-import ChatComponent from '../screens/Chat';
+
 import { Inbox } from '../screens/Inbox';
+import { Profile } from '../screens/Profile';
 
 
 const Tab = createBottomTabNavigator();
@@ -46,7 +46,7 @@ export const MyTabs = () => {
       }} />
       <Tab.Screen 
        name="Profile"
-       component={SignInScreen}
+       component={Profile}
        options={{
         headerShown: false,
         tabBarIcon: ({ focused, color, size }) => {

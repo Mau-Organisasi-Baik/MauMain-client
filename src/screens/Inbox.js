@@ -1,7 +1,6 @@
 import React from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
-import ChatComponent from './Chat';
 import ConversationListComponent from './ConversationList';
 import NotificationPopup from './Notification';
 
