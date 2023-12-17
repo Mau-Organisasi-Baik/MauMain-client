@@ -1,14 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Text, TextInput, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRoute } from '@react-navigation/native';
 import { Picker } from '@react-native-picker/picker'
 import Toast  from 'toastify-react-native';
 import axios from 'axios';
+import { LoginContext } from '../context/AuthContext';
+import * as SecureStore from 'expo-secure-store';
 
 const AuthForm = ({navigation}) => {
     const {name} = useRoute()
+    const {LoginAction, UserInfo} = useContext(LoginContext)
     const loginScreen = (name === 'Login')
+    
     const registerScreen = (name === 'Register')
     const uri = registerScreen ? 'register' : 'login'
     const [inputValues, setInputValues] = useState({
@@ -31,15 +35,16 @@ const AuthForm = ({navigation}) => {
     
     const submitForm = async () => {
       try {
-        await axios.post(`https://3ff1-110-137-195-250.ngrok-free.app/${uri}`, inputValues)
-        if(registerScreen) {
-          navigation.navigate('Login')
+        const {data} = await axios.post(`https://3ff1-110-137-195-250.ngrok-free.app/${uri}`, inputValues)
+        console.log('bawah data');
+        if(!registerScreen) {
+          await LoginAction('access_token', data.data.access_token)
+          await UserInfo('user_info', data.data.role)
         } else {
-          navigation.navigate('Explore')
+          navigation.navigate('Login')
         }
       } catch (error) {
         if (error.response) {
-          console.log(error.response.data.message);
           Toast.error(error.response.data.message)
         } else if (error.request) {
           Toast.error(error.request);
@@ -58,7 +63,7 @@ const AuthForm = ({navigation}) => {
       
       <TextInput
         placeholder="Email"
-        onChangeText={inputHandler.bind(this, 'usernameOrMail' ||'email' )}
+        onChangeText={inputHandler.bind(this, !registerScreen ? 'usernameOrMail' : 'email' )}
         placeholderTextColor="rgba(255, 255, 255, 0.7)"
         className="text-white text-base mb-4 px-2 py-2 border-b border-white rounded-md"
       />
@@ -100,8 +105,8 @@ const AuthForm = ({navigation}) => {
             selectedValue={inputValues.role}
             >
             <Picker.Item label='Register as' value={0}/>
-            <Picker.Item label='User' value={'User'}/>
-            <Picker.Item label='Admin' value={'Admin'}/>
+            <Picker.Item label='Player' value={'player'}/>
+            <Picker.Item label='Admin' value={'field'}/>
         </Picker> }
       
       <TouchableOpacity onPress={submitForm} className="border border-white py-2 rounded-full mt-4">
