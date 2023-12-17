@@ -10,7 +10,6 @@ export const AdminField = () => {
     const {LogoutAction} = React.useContext(LoginContext)
     const logoutHandler = async() => {
       await LogoutAction('access_token')
-      console.log('logout!');
     }
   return (<>
     <ScrollView className={('bg-gray-100')}>

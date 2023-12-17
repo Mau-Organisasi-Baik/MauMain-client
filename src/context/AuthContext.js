@@ -15,7 +15,7 @@ export const LoginProvider = ({ children }) => {
 
     async function LoginAction(key, value) {
         try {
-            await SecureStore.setItemAsync(key, JSON.stringify(value))
+            await SecureStore.setItemAsync(key, value)
             setIsLoggedIn(true)
         } catch (error) {
             throw error
