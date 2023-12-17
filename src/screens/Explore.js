@@ -15,7 +15,7 @@ const customMapStyle = [
 ]
 
 export const Explore = () => {
-  
+ 
   const [isDrawerVisible, setIsDrawerVisible] = useState(false)
     return (
         <>

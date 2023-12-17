@@ -1,11 +1,17 @@
 import React from 'react';
-import { View, Text, Image, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, Image, ScrollView, TouchableOpacity, Button } from 'react-native';
 
 import { AddTagsModal } from '../components/AddTagsModal';
+import { LoginContext } from '../context/AuthContext';
 
 
 export const AdminField = () => {
     const [modalVisible, setModalVisible] = React.useState(false);
+    const {LogoutAction} = React.useContext(LoginContext)
+    const logoutHandler = async() => {
+      await LogoutAction('access_token')
+      console.log('logout!');
+    }
   return (<>
     <ScrollView className={('bg-gray-100')}>
       <View className={('p-4')}>
@@ -65,6 +71,7 @@ export const AdminField = () => {
         </View>
       </View>
     </ScrollView>
+    <Button onPress={logoutHandler} title='Logout'/>
     {modalVisible && <AddTagsModal modalVisible={modalVisible} setModalVisible={setModalVisible} />}
     </>
   );
