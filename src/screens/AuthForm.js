@@ -47,6 +47,7 @@ const AuthForm = ({navigation}) => {
             }}
             selectedValue={'Register as'}
             >
+            <Picker.Item label='Register as' value={0}/>
             <Picker.Item label='User' value={'User'}/>
             <Picker.Item label='Admin' value={'Admin'}/>
         </Picker> }

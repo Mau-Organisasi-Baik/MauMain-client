@@ -13,7 +13,7 @@ export const ReserveField = () => {
       <ScrollView className={`mb-4`}>
         <Text className={`text-white text-xl mb-2`}>TEAM A</Text>
         <PlayerCard style={{borderColor:"orange", borderWidth:2}} playerName="Jinx Pro Amanda" playerStatus="Chat" onPress={() => {}} />
-        {/* ... other cards */}
+     
         <PlayerCard playerName="Jinx Pro Baix" playerStatus="Chat" onPress={() => {}} />
         <PlayerCard playerName="Boom_AnakBaix" playerStatus="Chat" onPress={() => {}} />
         <PlayerCard playerName="InYourDream" playerStatus="Chat" onPress={() => {}} />

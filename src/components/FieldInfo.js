@@ -9,7 +9,7 @@ export const FieldInfo = ({admin}) => {
                 {!admin &&<View className="flex-row items-center self-end">
                     <Text>Invite Friend</Text>
                     <TouchableOpacity className="px-3 py-1 rounded-full m-2 bg-blue-500">
-                            SS<Text className="text-white text-center text-xl">+</Text>
+                            <Text className="text-white text-center text-xl">+</Text>
                     </TouchableOpacity>
                 </View>}
                 {admin && <View className="my-4"/>}
