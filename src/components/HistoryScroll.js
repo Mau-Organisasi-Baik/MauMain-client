@@ -10,8 +10,8 @@ export const HistoryScroll = () => {
             </TouchableOpacity>
             <ScrollView>
                 <HistoryCard/>
-                <HistoryCard/>
-                <HistoryCard/>
+                {/* <HistoryCard/> */}
+                {/* <HistoryCard/> */}
             </ScrollView>
         </View>
         </>

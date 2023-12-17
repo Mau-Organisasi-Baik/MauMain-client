@@ -6,7 +6,7 @@ import { Picker } from '@react-native-picker/picker'
 import Toast  from 'toastify-react-native';
 import axios from 'axios';
 import { LoginContext } from '../context/AuthContext';
-import * as SecureStore from 'expo-secure-store';
+
 
 const AuthForm = ({navigation}) => {
     const {name} = useRoute()
