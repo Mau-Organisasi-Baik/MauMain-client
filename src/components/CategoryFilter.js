@@ -30,13 +30,11 @@ const CategoryFilter = ({ selectedTag, changeTag }) => {
     <SafeAreaView style={styles.container}>
       <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.scrollViewContainer}>
         {tags.map((tag, index) => {
-          let style;
+          let style = styles.button;
 
           if (selectedTag) {
             if (tag.name === selectedTag.name) {
               style = styles.buttonSelected;
-            } else {
-              style = styles.button;
             }
           }
 
