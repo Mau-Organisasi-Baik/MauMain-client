@@ -1,10 +1,32 @@
-import { useNavigation } from '@react-navigation/native';
-import React, { useEffect, useRef } from 'react';
-import { ScrollView, Animated,Image, View, Text, TouchableOpacity } from 'react-native';
+import { useNavigation } from "@react-navigation/native";
+import React, { useEffect, useRef, useState } from "react";
+import { ScrollView, Animated, Image, View, Text, TouchableOpacity } from "react-native";
+import axios from "axios";
+import { access_token } from "../../helpers/AccessToken";
+const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
 
-const BottomDrawer = ({ isDrawerOpen, setIsDrawerOpen }) => {
+function SkeletonDrawer() {
+  return (
+    <View className={`p-4`}>
+      <ScrollView>
+        <Image className=" mx-auto shadow-xl rounded-xl w-full h-64 object-cover" source={require("../../assets/lapangan.jpg")} />
+
+        <Text className=" text-xl font-bold">Lapangan</Text>
+        <View className={"flex flex-row"}></View>
+        <View className=" my-4">
+          {/* <TouchableOpacity onPress={() => navigation.navigate("Reservation Card")} className="bg-blue-500 px-14 py-2  rounded-lg">
+            <Text className="text-lg text-center tracking-wider">Book Now</Text>
+          </TouchableOpacity> */}
+        </View>
+      </ScrollView>
+    </View>
+  );
+}
+
+const BottomDrawer = ({ isDrawerOpen, setIsDrawerOpen, fieldId }) => {
   const drawerHeight = useRef(new Animated.Value(0)).current; // Initial height for the drawer
-  const navigation = useNavigation()
+  const navigation = useNavigation();
+
   useEffect(() => {
     if (isDrawerOpen) {
       Animated.spring(drawerHeight, { toValue: 500, useNativeDriver: false }).start();
@@ -13,6 +35,65 @@ const BottomDrawer = ({ isDrawerOpen, setIsDrawerOpen }) => {
     }
   }, [isDrawerOpen]);
 
+  const [fieldDetail, setFieldDetail] = useState(null);
+
+  async function fetchFieldDetail() {
+    const token = await access_token();
+
+    const url = `${BASE_URL}/fields/${fieldId}`;
+
+    const {
+      data: { data },
+    } = await axios.get(url, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+
+    const fieldData = data.field;
+    setFieldDetail(fieldData);
+  }
+
+  useEffect(() => {
+    fetchFieldDetail();
+  }, []);
+
+  let content;
+
+  if (!fieldDetail) {
+    content = <SkeletonDrawer />;
+  } else {
+    const { name, tags, photoUrls } = fieldDetail;
+
+    let image = require("../../assets/lapangan.jpg");
+    if (photoUrls[0]) {
+      image = { uri: photoUrls[0] };
+    }
+
+    content = (
+      <View className={`p-4`}>
+        <ScrollView>
+          <Image className=" mx-auto shadow-xl rounded-xl w-full h-64 object-cover" source={image} />
+
+          <Text className=" text-xl font-bold">{name}</Text>
+          <View className={"flex flex-row"}>
+            {tags.map((tag, idx) => {
+              return (
+                <Text key={idx} className=" bg-red-200 w-3/12 text-center my-2 mx-2 rounded-lg">
+                  {tag.name}
+                </Text>
+              );
+            })}
+          </View>
+          <View className=" my-4">
+            <TouchableOpacity onPress={() => navigation.navigate("Reservation Card")} className="bg-blue-500 px-14 py-2  rounded-lg">
+              <Text className="text-lg text-center tracking-wider">Book Now</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </View>
+    );
+  }
 
   return (
     <Animated.View
@@ -23,21 +104,9 @@ const BottomDrawer = ({ isDrawerOpen, setIsDrawerOpen }) => {
     >
       {/* Your drawer content */}
       <TouchableOpacity onPress={() => setIsDrawerOpen(!isDrawerOpen)}>
-        <Text className={`text-center p-4`}>{isDrawerOpen ? 'Swipe or tap to close' : 'Swipe or tap to open'}</Text>
+        <Text className={`text-center p-4`}>{isDrawerOpen ? "Swipe or tap to close" : "Swipe or tap to open"}</Text>
       </TouchableOpacity>
-      <View className={`p-4`}>
-        <ScrollView>
-        <Image className=" mx-auto shadow-xl rounded-xl w-full h-64 object-cover" source={require('../../assets/lapangan.jpg')} />
-        <Text className=" text-xl font-bold">Lapangan Pomad, Pancoran, DKI JAKARTA</Text>
-        <Text className=" bg-red-200 w-3/12 text-center my-2 rounded-lg">Sepak Bola</Text>
-        <View className=" my-4">
-            <TouchableOpacity onPress={()=> navigation.navigate('Reservation Card')} className="bg-blue-500 px-14 py-2  rounded-lg">
-                <Text className="text-lg text-center tracking-wider">Book Now</Text>
-            </TouchableOpacity>
-          
-        </View>
-        </ScrollView>
-      </View>
+      {content}
     </Animated.View>
   );
 };
