@@ -1,6 +1,6 @@
 import { Text, View } from "react-native";
 
-export const XPBar = ({ currentXP = 0  , totalXP = 1000 }) => {
+export const XPBar = ({ currentXP = 500  , totalXP = 1000 }) => {
     const xpPercentage = (currentXP / totalXP) * 100;
     console.log(xpPercentage);
     return (<>
