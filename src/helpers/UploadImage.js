@@ -3,6 +3,7 @@ import * as ImagePicker from 'expo-image-picker';
 import Toast from 'toastify-react-native'
 import * as SecureStore from 'expo-secure-store';
 import { access_token } from './AccessToken';
+import { BASE_URL } from './BASE_URL';
 
 const requestPermission = async() => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -67,7 +68,7 @@ const requestPermission = async() => {
     })
     formData.append('name', 'agus123')
     try {
-      const response = await axios.post('https://3ff1-110-137-195-250.ngrok-free.app/profile', formData, {
+      const response = await axios.post(`${BASE_URL}/profile`, formData, {
         headers: {
           Authorization : `Bearer ${access_token}`,
           'Content-Type': 'multipart/form-data'
@@ -95,7 +96,7 @@ const requestPermission = async() => {
     });
   
     try {
-      const response = await axios.post('https://3ff1-110-137-195-250.ngrok-free.app/fields/', formData, {
+      const response = await axios.post(`${BASE_URL}/fields/`, formData, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'multipart/form-data'
