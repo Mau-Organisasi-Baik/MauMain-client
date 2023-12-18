@@ -63,7 +63,7 @@ const BottomDrawer = ({ isDrawerOpen, setIsDrawerOpen, fieldId }) => {
   if (!fieldDetail) {
     content = <SkeletonDrawer />;
   } else {
-    const { name, tags, photoUrls } = fieldDetail;
+    const { name, tags, photoUrls, _id: fieldId } = fieldDetail;
 
     let image = require("../../assets/lapangan.jpg");
     if (photoUrls[0]) {
@@ -86,8 +86,8 @@ const BottomDrawer = ({ isDrawerOpen, setIsDrawerOpen, fieldId }) => {
             })}
           </View>
           <View className=" my-4">
-            <TouchableOpacity onPress={() => navigation.navigate("Reservation Card")} className="bg-blue-500 px-14 py-2  rounded-lg">
-              <Text className="text-lg text-center tracking-wider">Book Now</Text>
+            <TouchableOpacity onPress={() => navigation.navigate("Reservation Card", {fieldId})} className="bg-blue-500 px-14 py-2  rounded-lg">
+              <Text className="text-lg text-center tracking-wider">See Reservations</Text>
             </TouchableOpacity>
           </View>
         </ScrollView>

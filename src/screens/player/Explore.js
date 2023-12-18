@@ -87,8 +87,10 @@ export const Explore = () => {
         return;
       }
 
-      let location = await Location.getCurrentPositionAsync({});
-      setLocation(location);
+      let newLocation = await Location.getCurrentPositionAsync({});
+      console.log(newLocation);
+      
+      setLocation(newLocation);
     })();
   }, []);
 
