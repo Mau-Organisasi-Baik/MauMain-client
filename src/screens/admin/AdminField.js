@@ -1,13 +1,15 @@
 import React from 'react';
 import { View, Text, Image, ScrollView, TouchableOpacity, Button } from 'react-native';
 
-import { AddTagsModal } from '../components/AddTagsModal';
-import { LoginContext } from '../context/AuthContext';
+import { AddTagsModal } from '../../components/modal/AddTagsModal';
+import { LoginContext } from '../../context/AuthContext';
+import { access_token } from '../../helpers/AccessToken';
 
 
 export const AdminField = () => {
     const [modalVisible, setModalVisible] = React.useState(false);
     const {LogoutAction} = React.useContext(LoginContext)
+    access_token().then(data => console.log(data))
     const logoutHandler = async() => {
       await LogoutAction('access_token')
     }
@@ -22,7 +24,7 @@ export const AdminField = () => {
          contentContainerStyle={{ alignItems: 'center' }}>
         <Image
         className="h-40 w-40 rounded-lg mr-2" // Set a width and add margin-right for spacing
-        source={require('../assets/lapangan.jpg')}
+        source={require('../../assets/lapangan.jpg')}
         />
         <Image
         className="h-40 w-40 rounded-lg mr-2" // Repeat for each image

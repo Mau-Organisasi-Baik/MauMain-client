@@ -1,12 +1,11 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Explore } from '../screens/Explore';
-import SignInScreen from '../screens/LoginScreen';
+import { Explore } from '../screens/player/Explore';
 
 import { Ionicons } from '@expo/vector-icons';
 import CategoryFilter from '../components/CategoryFilter';
 
-import { Inbox } from '../screens/Inbox';
-import { Profile } from '../screens/Profile';
+import { Inbox } from '../screens/player/Inbox';
+import { Profile } from '../screens/player/Profile';
 
 
 const Tab = createBottomTabNavigator();

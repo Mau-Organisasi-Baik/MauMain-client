@@ -2,6 +2,7 @@ import axios from 'axios';
 import * as ImagePicker from 'expo-image-picker';
 import Toast from 'toastify-react-native'
 import * as SecureStore from 'expo-secure-store';
+import { access_token } from './AccessToken';
 
 const requestPermission = async() => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -12,8 +13,29 @@ const requestPermission = async() => {
     return true;
   }
 
+  export const pickMultipleImage = async() => {
+    try {
+      const hasPermission = await requestPermission();
+      if (!hasPermission) return;
+    
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsMultipleSelection : true,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+    
+      if (!result.canceled) {
+        await uploadMultipleImages(result.assets[0].uri)
+      }
+      
+    } catch (error) {
+      Toast.error(error)
+    }
+  }
+
   export const pickImage = async() => {
-    console.log('terpencet');
     try {
       const hasPermission = await requestPermission();
       if (!hasPermission) return;
@@ -59,3 +81,31 @@ const requestPermission = async() => {
       Toast.error(`An error occurred during the upload.`)
     }
   }
+
+  const uploadMultipleImages = async (imageUris) => {
+    const token = await access_token()
+    const formData = new FormData();
+  
+    imageUris.forEach((uri, index) => {
+      formData.append('photos', { // Gunakan 'photos' atau nama field lainnya
+        uri,
+        type: 'image/jpeg',
+        name: `photo_${index}.jpg`,
+      });
+    });
+  
+    try {
+      const response = await axios.post('https://3ff1-110-137-195-250.ngrok-free.app/fields/', formData, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data'
+        },
+      });
+  
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+      // ... penanganan error
+    }
+  };
+  

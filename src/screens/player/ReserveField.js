@@ -1,7 +1,7 @@
 import { ScrollView, Text, TouchableOpacity, View } from "react-native"
-import { PlayerCard } from "../components/PlayerCard"
-import { FieldInfo } from "../components/FieldInfo"
-import BookModal from "../components/BookModal";
+import { PlayerCard } from "../../components/card/PlayerCard"
+import { FieldInfo } from "../../components/FieldInfo"
+import BookModal from "../../components/modal/BookModal";
 import { useState } from "react";
 
 export const ReserveField = () => {

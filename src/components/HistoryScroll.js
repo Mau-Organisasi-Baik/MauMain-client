@@ -1,5 +1,5 @@
 import { ScrollView, Text, TouchableOpacity, View } from "react-native"
-import { HistoryCard } from "./HistoryCard"
+import { HistoryCard } from "./card/HistoryCard"
 
 export const HistoryScroll = () => {
     return (

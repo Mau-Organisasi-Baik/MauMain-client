@@ -1,12 +1,13 @@
 import { LinearGradient } from "expo-linear-gradient"
 import { Button, Image, Text, TouchableOpacity, TextInput } from "react-native"
-import { XPBar } from "../components/XPBar"
-import { HistoryScroll } from "../components/HistoryScroll"
-import { LoginContext } from "../context/AuthContext"
+import { XPBar } from "../../components/XPBar"
+import { HistoryScroll } from "../../components/HistoryScroll"
+import { LoginContext } from "../../context/AuthContext"
 import {useContext, useState, useEffect} from 'react'
-import { pickImage } from "../helpers/UploadImage"
+import { pickImage } from "../../helpers/UploadImage"
 import axios from "axios"
-import { access_token } from "../helpers/AccessToken"
+import { access_token } from "../../helpers/AccessToken"
+import { BASE_URL } from "../../helpers/BASE_URL"
 
 
 
@@ -17,7 +18,7 @@ export const Profile = ({navigation}) => {
   useEffect(() => {
     const asyncFn = async() => {
       const token = await access_token()
-      const {data} = await axios.get('https://3ff1-110-137-195-250.ngrok-free.app/profile', {
+      const {data} = await axios.get(`${BASE_URL}/profile`, {
         headers : {
           Authorization : `Bearer ${token}`
         }
@@ -26,11 +27,8 @@ export const Profile = ({navigation}) => {
     }
     asyncFn()
   }, [])
-  
-console.log(profileData);
   const logoutHandler = async() => {
     await LogoutAction('access_token')
-    
   }
     return (
         <>

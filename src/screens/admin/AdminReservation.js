@@ -1,4 +1,4 @@
-import { AdminReservationCard } from "../components/AdminReservationCard"
+import { AdminReservationCard } from "../../components/AdminReservationCard"
 import {ScrollView} from 'react-native'
 export const AdminReservation = () => {
     return (

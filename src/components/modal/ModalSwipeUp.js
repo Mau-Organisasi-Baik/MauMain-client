@@ -27,7 +27,7 @@ const BottomDrawer = ({ isDrawerOpen, setIsDrawerOpen }) => {
       </TouchableOpacity>
       <View className={`p-4`}>
         <ScrollView>
-        <Image className=" mx-auto shadow-xl rounded-xl w-full h-64 object-cover" source={require('../assets/lapangan.jpg')} />
+        <Image className=" mx-auto shadow-xl rounded-xl w-full h-64 object-cover" source={require('../../assets/lapangan.jpg')} />
         <Text className=" text-xl font-bold">Lapangan Pomad, Pancoran, DKI JAKARTA</Text>
         <Text className=" bg-red-200 w-3/12 text-center my-2 rounded-lg">Sepak Bola</Text>
         <View className=" my-4">

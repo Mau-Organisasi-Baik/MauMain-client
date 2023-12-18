@@ -1,16 +1,16 @@
 import { createStackNavigator } from '@react-navigation/stack';
-import AuthForm from '../screens/AuthForm';
-import { GetStarted } from '../screens/GetStarted';
-import { ReservationCard } from '../screens/ReservationCard';
+import AuthForm from '../screens/auth/AuthForm';
+import { GetStarted } from '../screens/auth/GetStarted';
+import { ReservationCard } from '../screens/player/ReservationCard';
 import { MyTabs } from './BottomTabNavigator';
-import { ReserveField } from '../screens/ReserveField';
-import ChatComponent from '../screens/Chat';
+import { ReserveField } from '../screens/player/ReserveField';
+import ChatComponent from '../screens/player/Chat';
 import { AdminBottomTab } from './AdminBottomTab';
-import { AdminScheduleForm } from '../screens/AdminScheduleForm';
-import { AdminDetailReservation } from '../screens/AdminDetailReservation';
+import { AdminScheduleForm } from '../screens/admin/AdminScheduleForm';
+import { AdminDetailReservation } from '../screens/admin/AdminDetailReservation';
 import { LoginContext } from '../context/AuthContext';
 import {useContext} from 'react'
-import { Explore } from '../screens/Explore';
+
 
 export const StackNavigator = () => {
   const Stack = createStackNavigator()

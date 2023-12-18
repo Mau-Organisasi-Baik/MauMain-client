@@ -1,8 +1,8 @@
 import { ScrollView, Text, TouchableOpacity, View } from "react-native"
-import { PlayerCard } from "../components/PlayerCard"
+import { PlayerCard } from "../../components/card/PlayerCard"
 import {useState} from 'react'
-import { FieldInfo } from "../components/FieldInfo";
-import { InputScoreModal } from "../components/InputScoreModal";
+import { FieldInfo } from "../../components/FieldInfo";
+import { InputScoreModal } from "../../components/modal/InputScoreModal";
 
 export const AdminDetailReservation = () => {
   const [modalVisible, setModalVisible] = useState(false);

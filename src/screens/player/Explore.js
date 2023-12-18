@@ -1,7 +1,7 @@
 
 import MapView, {Marker} from 'react-native-maps'
 import {useState} from 'react'
-import BottomDrawer from '../components/ModalSwipeUp'
+import BottomDrawer from '../../components/modal/ModalSwipeUp'
 const customMapStyle = [
   {
     "featureType": "poi",

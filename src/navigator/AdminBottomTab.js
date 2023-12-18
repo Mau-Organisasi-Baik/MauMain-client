@@ -2,12 +2,12 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { Ionicons } from '@expo/vector-icons';
 
-import { Inbox } from '../screens/Inbox';
-import { Profile } from '../screens/Profile';
-import ChatComponent from '../screens/Chat';
-import { AdminField } from '../screens/AdminField';
-import { ScheduleCard } from '../screens/ScheduleCard';
-import { AdminReservation } from '../screens/AdminReservation';
+import { Inbox } from '../screens/player/Inbox';
+import { Profile } from '../screens/player/Profile';
+import ChatComponent from '../screens/player/Chat';
+import { AdminField } from '../screens/admin/AdminField';
+import { ScheduleCard } from '../screens/admin/ScheduleCard';
+import { AdminReservation } from '../screens/admin/AdminReservation';
 
 
 

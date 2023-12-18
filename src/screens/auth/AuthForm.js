@@ -5,7 +5,8 @@ import { useRoute } from '@react-navigation/native';
 import { Picker } from '@react-native-picker/picker'
 import Toast  from 'toastify-react-native';
 import axios from 'axios';
-import { LoginContext } from '../context/AuthContext';
+import { LoginContext } from '../../context/AuthContext';
+import { BASE_URL } from '../../helpers/BASE_URL';
 
 
 const AuthForm = ({navigation}) => {
@@ -35,7 +36,7 @@ const AuthForm = ({navigation}) => {
     
     const submitForm = async () => {
       try {
-        const {data} = await axios.post(`https://3ff1-110-137-195-250.ngrok-free.app/${uri}`, inputValues)
+        const {data} = await axios.post(`${BASE_URL}/${uri}`, inputValues)
         console.log('bawah data');
         if(!registerScreen) {
           await LoginAction('access_token', data.data.access_token)
