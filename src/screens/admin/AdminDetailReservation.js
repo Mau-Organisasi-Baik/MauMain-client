@@ -19,7 +19,6 @@ export const AdminDetailReservation = ({route}) => {
         'Authorization' : `Bearer ${token}`
     }
   })
-  console.log(data);
   setDetailField(previousValue => ({
     ...previousValue,
     status: data.data.status 
