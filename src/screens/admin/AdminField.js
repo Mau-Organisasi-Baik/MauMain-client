@@ -3,13 +3,10 @@ import { View, Text, Image, ScrollView, TouchableOpacity, Button } from 'react-n
 
 import { AddTagsModal } from '../../components/modal/AddTagsModal';
 import { LoginContext } from '../../context/AuthContext';
-import { access_token } from '../../helpers/AccessToken';
-
 
 export const AdminField = () => {
     const [modalVisible, setModalVisible] = React.useState(false);
     const {LogoutAction} = React.useContext(LoginContext)
-    access_token().then(data => console.log(data))
     const logoutHandler = async() => {
       await LogoutAction('access_token')
     }

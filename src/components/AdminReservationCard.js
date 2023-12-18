@@ -3,18 +3,17 @@ import { useNavigation } from '@react-navigation/native';
 import { GetUtcHours } from '../helpers/GetUtcHours';
 
 export const AdminReservationCard = ({reservation}) => {
-    console.log(reservation, 'ini reserv');
     const navigation = useNavigation()
     return (
         <>
     <View className="mx-4 my-2 p-4 bg-white rounded-lg shadow">
         <View className="flex-row justify-between items-center mb-4">
-            <Text className="text-lg font-bold">{reservation.fieldId}</Text>
+            <Text className="text-lg font-bold">{reservation._id}</Text>
             <Text className="text-sm bg-blue-100 text-blue-800 py-1 px-3 rounded-full">{reservation.tag.name}</Text>
         </View>
         <View className="flex-row justify-between items-center">
             <Text className="text-gray-600">{reservation.date}, {GetUtcHours(reservation.schedule.TimeStart)} - {GetUtcHours(reservation.schedule.TimeEnd)}</Text>
-            <TouchableOpacity onPress={() => navigation.navigate('AdminDetailReservation')} className="bg-blue-500 py-2 px-4 rounded-full">
+            <TouchableOpacity onPress={() => navigation.navigate('AdminDetailReservation', {id : reservation._id})} className="bg-blue-500 py-2 px-4 rounded-full">
             <Text className="text-white font-bold">Details</Text>
             </TouchableOpacity>
         </View>
