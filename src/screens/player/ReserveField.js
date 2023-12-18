@@ -27,7 +27,7 @@ function CompetitiveReservation({ reservation }) {
   return (
     <>
       <Text className={`text-white text-xl mb-2`}>TEAM A</Text>
-      <PlayerCard style={{ borderColor: "orange", borderWidth: 2 }} playerName="Jinx Pro Amanda" playerStatus="Chat" onPress={() => {}} />
+      {/* <PlayerCard style={{ borderColor: "orange", borderWidth: 2 }} playerName="Jinx Pro Amanda" playerStatus="Chat" onPress={() => {}} />
 
       <PlayerCard playerName="Jinx Pro Baix" playerStatus="Chat" onPress={() => {}} />
       <PlayerCard playerName="Boom_AnakBaix" playerStatus="Chat" onPress={() => {}} />
@@ -37,7 +37,7 @@ function CompetitiveReservation({ reservation }) {
       <PlayerCard playerName="Budi543" playerStatus="Chat" onPress={() => {}} />
       <PlayerCard playerName="EVOS_baixPro" playerStatus="Chat" onPress={() => {}} />
       <PlayerCard playerName="EVOS_DEWA" playerStatus="Chat" onPress={() => {}} />
-      <PlayerCard playerName="MauJahat546" playerStatus="Chat" onPress={() => {}} />
+      <PlayerCard playerName="MauJahat546" playerStatus="Chat" onPress={() => {}} /> */}
     </>
   );
 }

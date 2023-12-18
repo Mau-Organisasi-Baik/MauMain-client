@@ -1,10 +1,9 @@
-import { Image, Text, TouchableOpacity } from "react-native";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import { BASE_URL } from "../../helpers/BASE_URL";
 import { access_token } from "../../helpers/AccessToken";
 import { Toast } from "toastify-react-native";
-import { Image, Text, TouchableOpacity, View } from "react-native";
 
 export const PlayerCard = ({ gameStatus, style, fieldId, setPlayers, player, onPress, admin }) => {
   const kickUser = async (selectedPlayerId) => {
