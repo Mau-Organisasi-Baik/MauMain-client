@@ -12,6 +12,7 @@ export const AdminReservation = () => {
     const {userInfo} = useContext(LoginContext)
 
     const token = userInfo.access_token
+    
     useEffect(() => {
         const asyncFn = async() => {
             const {data} = await axios.get(`${BASE_URL}/admin/reservations`, {

@@ -1,20 +1,23 @@
 import { FlatList, ScrollView, Text, TouchableOpacity, View } from "react-native"
 import { PlayerCard } from "../../components/card/PlayerCard"
-import {useEffect, useState} from 'react'
+import {useContext, useEffect, useState} from 'react'
 import { FieldInfo } from "../../components/FieldInfo";
 import { InputScoreModal } from "../../components/modal/InputScoreModal";
 import axios from "axios";
 import { BASE_URL } from "../../helpers/BASE_URL";
 import { access_token } from "../../helpers/AccessToken";
+import { LoginContext } from "../../context/AuthContext";
 
 export const AdminDetailReservation = ({route}) => {
   const {id} = route.params
   const [detailField, setDetailField] = useState({})
   const [players, setPlayers] = useState([])
-
+  const {userInfo} = useContext(LoginContext)
+  const token = userInfo.access_token
+  console.log(id, 'tes');
   const gameStatus = detailField.status
   const endGame = async() => {
-    const token = await access_token()
+    
     const {data} = await axios.put(`${BASE_URL}/admin/reservations/${id}/end`, {id}, {
       headers : {
         'Authorization' : `Bearer ${token}`
@@ -29,7 +32,7 @@ export const AdminDetailReservation = ({route}) => {
   useEffect(() => {
     const asyncFn = async() => {
       try {
-        const token = await access_token()
+        
         const {data} = await axios.get(`${BASE_URL}/admin/reservations/${id}`, {
           headers : {
             'Authorization' : `Bearer ${token}`
