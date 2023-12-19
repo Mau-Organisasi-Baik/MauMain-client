@@ -23,7 +23,7 @@ export const StackNavigator = () => {
         di componentnya kalau si user ini admin atau engga */}
         <Stack.Screen 
           name='Main Screen'
-          component={userRole === 'player' ? MyTabs : AdminBottomTab}
+          component={userRole === 'player' ?   AdminBottomTab: MyTabs}
           options={{
             headerShown: false,
           }}
