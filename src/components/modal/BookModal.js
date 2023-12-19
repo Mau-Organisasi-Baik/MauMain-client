@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { View, Modal, Text, TouchableOpacity, Image, TextInput } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import axios from "axios";
-import { access_token } from "../../helpers/AccessToken";
 import { getScheduleTime } from "../../helpers/ScheduleTime";
+import { LoginContext } from "../../context/AuthContext";
 const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
 
-export const BookModal = ({ modalVisible, setModalVisible, bookInformation, addCallback }) => {
+export const BookModal = ({ modalVisible, setModalVisible, bookInformation, toggleIndicator }) => {
+  const { userInfo } = useContext(LoginContext);
+  const token = userInfo.access_token;
+
   const [tags, setTags] = useState([
     {
       _id: "",
@@ -26,8 +29,6 @@ export const BookModal = ({ modalVisible, setModalVisible, bookInformation, addC
   const { schedule, fieldId } = bookInformation;
 
   async function fetchTagsFromField() {
-    const token = await access_token();
-
     const url = `${BASE_URL}/fields/${fieldId}`;
     const {
       data: { data },
@@ -52,8 +53,6 @@ export const BookModal = ({ modalVisible, setModalVisible, bookInformation, addC
   const timeEnd = getScheduleTime(TimeEnd);
 
   async function createReservation() {
-    const token = await access_token();
-
     console.log({
       fieldId,
       scheduleId,
@@ -62,7 +61,7 @@ export const BookModal = ({ modalVisible, setModalVisible, bookInformation, addC
     });
 
     const url = `${BASE_URL}/reservations`;
-    const { data } = await axios.post(
+    await axios.post(
       url,
       {
         fieldId,
@@ -77,7 +76,7 @@ export const BookModal = ({ modalVisible, setModalVisible, bookInformation, addC
       }
     );
 
-    console.log('created');
+    toggleIndicator();
   }
 
   return (

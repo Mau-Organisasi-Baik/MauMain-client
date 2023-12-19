@@ -1,11 +1,12 @@
 import MapView, { Marker } from "react-native-maps";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import BottomDrawer from "../../components/modal/ModalSwipeUp";
 import { access_token } from "../../helpers/AccessToken";
 import axios from "axios";
 
 import * as Location from "expo-location";
 import CategoryFilter from "../../components/CategoryFilter";
+import { LoginContext } from "../../context/AuthContext";
 
 const customMapStyle = [
   {
@@ -19,12 +20,14 @@ const customMapStyle = [
   },
 ];
 
-function FieldMarker({ field, handler }) {
+function FieldMarker({ field, handler, mapviewRef }) {
   const { coordinates, name, address } = field;
 
   return (
     <Marker
-      onPress={() => handler()}
+      onPress={() => {
+        handler()
+      }}
       coordinate={{
         latitude: coordinates[0],
         longitude: coordinates[1],
@@ -36,6 +39,8 @@ function FieldMarker({ field, handler }) {
 }
 
 export const Explore = () => {
+  const {userInfo} = useContext(LoginContext)
+
   const [isDrawerVisible, setIsDrawerVisible] = useState(false);
   const [location, setLocation] = useState(null);
   const [fields, setFields] = useState([]);
@@ -47,7 +52,8 @@ export const Explore = () => {
   }
 
   async function fetchFields() {
-    const token = await access_token();
+    
+    
 
     try {
       const {
@@ -61,6 +67,8 @@ export const Explore = () => {
       if (selectedTag) {
         url += `&tagId=${selectedTag._id}`;
       }
+
+      const token = userInfo.access_token
 
       const {
         data: { data },

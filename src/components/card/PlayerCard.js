@@ -2,14 +2,16 @@ import { Image, Text, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import { BASE_URL } from "../../helpers/BASE_URL";
-import { access_token } from "../../helpers/AccessToken";
 import { Toast } from "toastify-react-native";
 
 export const PlayerCard = ({ gameStatus, style, fieldId, setPlayers, player, onPress, admin }) => {
+  const { userInfo } = useContext(LoginContext);
+  const token = userInfo.access_token;
+
   const kickUser = async (selectedPlayerId) => {
     try {
-      const token = await access_token();
       if (gameStatus === "ended") return Toast.error("Game already ended!");
+
       await axios.put(
         `${BASE_URL}/admin/reservations/${fieldId}/kick`,
         { selectedPlayerId },
