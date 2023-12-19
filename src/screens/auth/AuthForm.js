@@ -35,7 +35,7 @@ export function LoginForm({ navigation }) {
       await LoginAction();
       await loginInfo(data);
     } catch (error) {
-      console.log(error.response.data);
+   
       if (error.response) {
         Toast.error(error.response.data.message);
       } else if (error.request) {

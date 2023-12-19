@@ -1,15 +1,17 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, FlatList } from 'react-native';
 import { BASE_URL } from '../../helpers/BASE_URL';
-import { access_token } from '../../helpers/AccessToken';
+
 import { ScheduleCard } from '../../components/card/ScheduleCard';
+import { LoginContext } from '../../context/AuthContext';
 
 export const Schedules = ({navigation}) => {
   const [schedules, setSchedules] = useState([])
+  const { userInfo } = useContext(LoginContext)
+  const token = userInfo.access_token
   useEffect(() => {
     const asyncFn = async() => {
-      const token = await access_token()
       const {data} = await axios.get(`${BASE_URL}/admin/schedules`, {
         headers: {
           'Authorization': `Bearer ${token}`
