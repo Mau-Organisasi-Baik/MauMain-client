@@ -68,7 +68,7 @@ export const AdminDetailReservation = ({route}) => {
         <Text className={`text-white text-center text-lg`}>Input Score</Text>
       </TouchableOpacity> */}
     </View>
-    {modalVisible && <InputScoreModal modalVisible={modalVisible} setModalVisible={setModalVisible}/>}
+    {modalVisible && <InputScoreModal modalVisible={modalVisible} setModalVisible={setModalVisible} reservationId={id}/>}
         </>
     )
 }
