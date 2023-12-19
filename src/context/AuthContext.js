@@ -24,7 +24,7 @@ export const LoginProvider = ({ children }) => {
     async function UserInfo(key, value) {
         try {
             await SecureStore.setItemAsync(key, JSON.stringify(value))
-            setUserRole(value)
+            setUserRole(value.role)
         } catch (error) {
             throw error
         }

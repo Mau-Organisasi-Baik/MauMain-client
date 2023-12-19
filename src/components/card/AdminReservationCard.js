@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity, ScrollView, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { GetUtcHours } from '../helpers/GetUtcHours';
+import { GetUtcHours } from '../../helpers/GetUtcHours';
 
 export const AdminReservationCard = ({reservation}) => {
     const navigation = useNavigation()

@@ -37,10 +37,10 @@ const AuthForm = ({navigation}) => {
     const submitForm = async () => {
       try {
         const {data} = await axios.post(`${BASE_URL}/${uri}`, inputValues)
-        console.log('bawah data');
+  
         if(!registerScreen) {
           await LoginAction('access_token', data.data.access_token)
-          await UserInfo('user_info', data.data.role)
+          await UserInfo('user_info', data.data)
         } else {
           navigation.navigate('Login')
         }

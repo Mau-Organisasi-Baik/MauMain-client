@@ -5,7 +5,7 @@ import * as SecureStore from 'expo-secure-store';
 import { access_token } from './AccessToken';
 import { BASE_URL } from './BASE_URL';
 
-const requestPermission = async() => {
+export const requestPermission = async() => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
       Toast.info('Sorry, we need camera roll permissions to make this work!');
@@ -53,7 +53,6 @@ const requestPermission = async() => {
       }
       
     } catch (error) {
-      console.log(error);
       Toast.error(error)
     }
   }
@@ -74,7 +73,7 @@ const requestPermission = async() => {
           'Content-Type': 'multipart/form-data'
         },
       })
-      console.log('ada');
+      
       const result = await response.data;
       console.log(result, 'outpt');
     } catch (error) {
@@ -88,7 +87,7 @@ const requestPermission = async() => {
     const formData = new FormData();
   
     imageUris.forEach((uri, index) => {
-      formData.append('photos', { // Gunakan 'photos' atau nama field lainnya
+      formData.append('photos', { 
         uri,
         type: 'image/jpeg',
         name: `photo_${index}.jpg`,
@@ -102,11 +101,10 @@ const requestPermission = async() => {
           'Content-Type': 'multipart/form-data'
         },
       });
-  
       console.log(response.data);
     } catch (error) {
       console.error(error);
-      // ... penanganan error
+
     }
   };
   
