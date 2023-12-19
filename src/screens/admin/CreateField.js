@@ -10,16 +10,29 @@ const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
 
 const DEFAULT_IMAGE = "https://via.placeholder.com/600x400";
 
-export const CreateField = () => {
+export const CreateField = ({ navigation, route }) => {
   const { userInfo } = useContext(LoginContext);
   const [inputValues, setInputValues] = useState({
     name: "",
     address: "",
-    coordinates: [],
   });
 
   const [selectedTags, setSelectedTags] = useState([]);
-  const [selectedImage, setSelectedImage] = useState({ uri: DEFAULT_IMAGE });
+  const [selectedImage, setSelectedImage] = useState({
+    name: "",
+    uri: DEFAULT_IMAGE,
+  });
+
+  let coordinates = [];
+  if (route.params?.coordinates) {
+    coordinates = route.params.coordinates;
+  }
+
+  if (coordinates.length === 2) {
+    coordinateText = `${coordinates[0]}, ${coordinates[1]}`;
+  } else {
+    coordinateText = "not set";
+  }
 
   const inputHandler = (inputIdentifier, enteredValue) => {
     setInputValues((currValue) => {
@@ -43,6 +56,8 @@ export const CreateField = () => {
       });
 
       if (result.uri) {
+        console.log(result);
+
         const { uri } = result;
         setSelectedImage({ uri });
       } else {
@@ -56,26 +71,63 @@ export const CreateField = () => {
   async function fieldSubmitHandler() {
     try {
       const { address, name } = inputValues;
+      const tagIds = selectedTags.map((tag) => tag._id).join(", ");
 
-      const tagIds = selectedTags.map((tag) => tag._id);
+      let parsedCoordinates = "";
 
+      if (coordinates.length === 2) {
+        parsedCoordinates = coordinates.join(", ");
+      }
+
+      console.log("abcdef");
       const url = `${BASE_URL}/admin/profile`;
-      const { data: data } = await axios.post(
-        url,
+      const formData = new FormData();
+
+      if (selectedImage.uri === DEFAULT_IMAGE) {
+        return Toast.error("Please insert field photo");
+      }
+
+      if (!name) {
+        return Toast.error("Please insert field name");
+      }
+
+      if (!tagIds) {
+        return Toast.error("Please insert any sport tag");
+      }
+
+      if (!address) {
+        return Toast.error("Please insert field address");
+      }
+
+      if (!parsedCoordinates) {
+        return Toast.error("Please pin field location");
+      }
+
+      formData.append("address", address);
+      formData.append("name", name);
+      formData.append("tagIds", tagIds);
+      formData.append("coordinates", parsedCoordinates);
+      formData.append("photos", [
         {
-          address,
-          name,
-          tagIds,
+          type: photo.type,
+          uri: Platform.OS === "ios" ? photo.uri.replace("file://", "") : photo.uri,
         },
-        {
-          headers: {
-            Authorization: "Bearer " + userInfo.access_token,
-          },
-        }
-      );
+      ]);
+
+      await axios({
+        url,
+        method: "post",
+        headers: {
+          Authorization: "Bearer " + userInfo.access_token,
+        },
+        data: formData,
+      });
+
+      Toast.success("OKEEEE");
     } catch (error) {
-      console.log(error.response.data);
-      Toast.error(error.response.message);
+      console.log(error);
+
+      Toast.error(error.response.data.message);
     }
   }
 
@@ -117,18 +169,14 @@ export const CreateField = () => {
               onChangeText={(text) => inputHandler("address", text)}
             />
 
-            <TouchableOpacity className={"bg-purple-500 w-full my-2 px-4 py-2 rounded-lg"}>
-              <Text className={"text-white text-center"}>Pin Lokasi</Text>
+            <TouchableOpacity className={"bg-purple-500 w-full my-2 px-4 py-2 rounded-lg"} onPress={() => navigation.navigate("pinpointField")}>
+              <Text className={"text-white text-center"}>Pin Location ({coordinateText})</Text>
             </TouchableOpacity>
           </View>
         </View>
 
-        <Pressable
-          style={{ padding: 15, width: "100%", backgroundColor: "rgb(27, 117, 208)", alignItems: "center" }}
-          onPress={fieldSubmitHandler}
-          title="Buat Profil"
-        >
-          <Text>Buat Profil</Text>
+        <Pressable style={{ padding: 15, width: "100%", backgroundColor: "rgb(27, 117, 208)", alignItems: "center" }} onPress={fieldSubmitHandler}>
+          <Text>Create Profile</Text>
         </Pressable>
       </ScrollView>
     </>

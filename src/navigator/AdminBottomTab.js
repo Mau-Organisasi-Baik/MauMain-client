@@ -57,9 +57,10 @@ export const AdminBottomTab = ({ navigation }) => {
   return (
     <Tab.Navigator>
       <Tab.Screen
-        name="Create Field Profile"
+        name="createField"
         component={CreateField}
         options={{
+          headerTitle: "Create Field Profile",
           // headerShown: false,
           tabBarIcon: ({ focused, color, size }) => {
             let iconName = focused ? "golf" : "golf-outline";
@@ -68,9 +69,10 @@ export const AdminBottomTab = ({ navigation }) => {
         }}
       />
       <Tab.Screen
-        name="Pinpoint Field Location"
+        name="pinpointField"
         component={PinpointField}
         options={{
+          headerTitle: "Pinpoint Field Location",
           // headerShown: false,
           tabBarIcon: ({ focused, color, size }) => {
             let iconName = focused ? "pin" : "pin-outline";
