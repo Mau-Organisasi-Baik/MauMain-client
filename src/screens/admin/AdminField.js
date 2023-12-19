@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, Image, ScrollView, TouchableOpacity, Button } from 'react-native';
 
 import { AddTagsModal } from '../../components/modal/AddTagsModal';
@@ -8,6 +8,7 @@ import { BASE_URL } from '../../helpers/BASE_URL';
 import axios from 'axios';
 
 export const AdminField = () => {
+    const {userInfo} = useContext(LoginContext)
     const [modalVisible, setModalVisible] = React.useState(false);
     const [adminField, setAdminField] = useState()
     const {LogoutAction} = React.useContext(LoginContext)
@@ -17,7 +18,8 @@ export const AdminField = () => {
     useEffect(() => {
       const asyncFn = async() => {
         try {
-          const token = await access_token()
+          const token = userInfo.access_token
+          
           const {data} = await axios.get(`${BASE_URL}/admin/profile`, {
             headers : {
               'Authorization' : `Bearer ${token}`

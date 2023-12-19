@@ -69,7 +69,7 @@ export const Explore = () => {
       }
 
       const token = userInfo.access_token
-
+      console.log(token);
       const {
         data: { data },
       } = await axios.get(url, {

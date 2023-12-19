@@ -6,24 +6,28 @@ import { LoginContext } from "../../context/AuthContext"
 import {useContext, useState, useEffect} from 'react'
 import { pickImage } from "../../helpers/UploadImage"
 import axios from "axios"
-import { access_token } from "../../helpers/AccessToken"
-import { BASE_URL } from "../../helpers/BASE_URL"
-
-
 
 export const Profile = ({navigation}) => {
-  const {LogoutAction} = useContext(LoginContext)
+  const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
+  
+  const {LogoutAction, userInfo} = useContext(LoginContext)
+
+  console.log(userInfo.role, "<<<");
   const [name, setName] = useState(null)
   const [profileData, setProfileData] = useState([])
   useEffect(() => {
     const asyncFn = async() => {
-      const token = await access_token()
-      const {data} = await axios.get(`${BASE_URL}/profile`, {
+      const token = userInfo.access_token
+
+      const {
+        data: { data },
+      } = await axios.get(`${BASE_URL}/profile`, {
         headers : {
           Authorization : `Bearer ${token}`
         }
-      })
-      setProfileData(data.data.user)
+      });
+      
+      setProfileData(data.user)
     }
     asyncFn()
   }, [])

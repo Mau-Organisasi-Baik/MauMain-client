@@ -2,10 +2,11 @@ import { Ionicons } from "@expo/vector-icons";
 import { Text, TouchableOpacity, View } from "react-native";
 import axios from "axios";
 import { access_token } from "../../helpers/AccessToken";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import ReservationItem from "../../components/PlayerReservationItem";
 import BookModal from "../../components/modal/BookModal";
 import { useFocusEffect } from "@react-navigation/native";
+import { LoginContext } from "../../context/AuthContext";
 const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
 
 export const ReservationCard = ({ navigation, route }) => {
@@ -32,7 +33,8 @@ export const ReservationCard = ({ navigation, route }) => {
 
   async function fetchReservations() {
     try {
-      const token = await access_token();
+      const { userInfo } = useContext(LoginContext)
+      const token = userInfo.access_token
 
       const url = `${BASE_URL}/fields/${fieldId}/reservations`;
 

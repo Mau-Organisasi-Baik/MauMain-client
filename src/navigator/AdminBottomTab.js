@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 import { Schedules } from '../screens/admin/Schedules';
 import { AdminReservation } from '../screens/admin/AdminReservation';
-import { CreateField } from '../screens/admin/CreateField';
+
 import { AdminField } from '../screens/admin/AdminField';
 
 
