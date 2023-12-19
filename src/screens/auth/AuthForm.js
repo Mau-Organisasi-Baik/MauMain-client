@@ -89,6 +89,7 @@ export function LoginForm({ navigation }) {
 export function RegisterForm({ navigation }) {
   const { LoginAction, loginInfo } = useContext(LoginContext);
 
+
   const [inputValues, setInputValues] = useState({
     name: "",
     username: "",
@@ -124,6 +125,7 @@ export function RegisterForm({ navigation }) {
         Toast.error(error.request);
       } else {
         Toast.error("Error", error.message);
+
       }
     }
   };

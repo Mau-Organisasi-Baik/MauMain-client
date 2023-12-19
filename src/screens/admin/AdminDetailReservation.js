@@ -12,6 +12,7 @@ export const AdminDetailReservation = ({route}) => {
   const [detailField, setDetailField] = useState({})
   const [players, setPlayers] = useState([])
 
+  const gameStatus = detailField.status
   const endGame = async() => {
     const token = await access_token()
     const {data} = await axios.put(`${BASE_URL}/admin/reservations/${id}/end`, {id}, {
@@ -43,6 +44,9 @@ export const AdminDetailReservation = ({route}) => {
     asyncFn()
   }, [])
   const [modalVisible, setModalVisible] = useState(false);
+  const inputScoreHandler = () => {
+    setModalVisible(true)
+  }
   
     return (
         <>
@@ -57,8 +61,8 @@ export const AdminDetailReservation = ({route}) => {
         }
       />
       
-      <TouchableOpacity onPress={endGame}  className={`bg-blue-700 p-4 rounded-full`}>
-        <Text className={`text-white text-center text-lg`}>Done</Text>
+      <TouchableOpacity onPress={gameStatus === 'ended' ? inputScoreHandler :  endGame}  className={`bg-blue-700 p-4 rounded-full`}>
+        <Text className={`text-white text-center text-lg`}>{gameStatus === 'ended' ? 'Input Score' : 'Done'}</Text>
       </TouchableOpacity>
       {/* <TouchableOpacity onPress={() => setModalVisible(true)} className={`bg-blue-700 p-4 rounded-full`}>
         <Text className={`text-white text-center text-lg`}>Input Score</Text>

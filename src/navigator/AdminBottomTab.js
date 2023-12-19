@@ -2,12 +2,10 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { Ionicons } from '@expo/vector-icons';
 
-import { Inbox } from '../screens/player/Inbox';
-import { Profile } from '../screens/player/Profile';
-import ChatComponent from '../screens/player/Chat';
-import { AdminField } from '../screens/admin/AdminField';
-import { ScheduleCard } from '../screens/admin/ScheduleCard';
+import { Schedules } from '../screens/admin/Schedules';
 import { AdminReservation } from '../screens/admin/AdminReservation';
+import { CreateField } from '../screens/admin/CreateField';
+import { AdminField } from '../screens/admin/AdminField';
 
 
 
@@ -30,7 +28,7 @@ export const AdminBottomTab = () => {
 
       <Tab.Screen 
        name="Schedules"
-       component={ScheduleCard}
+       component={Schedules}
        options={{
         tabBarIcon: ({ focused, color, size }) => {
           let iconName = focused ? 'today' : 'today-outline'; 

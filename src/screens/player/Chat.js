@@ -1,12 +1,29 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import * as TalkRn from '@talkjs/expo';
+import { access_token } from '../../helpers/AccessToken';
+import axios from 'axios';
+import { BASE_URL } from '../../helpers/BASE_URL';
 
 export default function ChatComponent(props) {
+  const [profileData, setProfileData] = useState({})
+  useEffect(() => {
+    const asyncFn = async() => {
+      const token = await access_token()
+      const {data} = await axios.get(`${BASE_URL}/profile`, {
+        headers : {
+          Authorization : `Bearer ${token}`
+        }
+      })
+      setProfileData(data.data.user)
+    }
+    asyncFn()
+  }, [])
+  console.log(profileData);
   const me = {
     id: '123456789',
-    name: 'Alice',
+    name: profileData.name,
     email: 'alice@example.com',
-    photoUrl: 'https://talkjs.com/images/avatar-1.jpg',
+    photoUrl: profileData.profilePictureUrl,
     welcomeMessage: 'Hey there! How are you? :-)',
     role: 'default',
   };

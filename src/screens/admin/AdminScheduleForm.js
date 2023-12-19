@@ -1,29 +1,87 @@
 import React, { useState } from 'react';
 import { View, TextInput, Switch, Button, Text } from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import { FormatHourAndMinute } from '../../helpers/GetUtcHours';
+import axios from 'axios';
+import { BASE_URL } from '../../helpers/BASE_URL';
+import { Toast } from 'toastify-react-native';
+import { access_token } from '../../helpers/AccessToken';
+import { useNavigation } from '@react-navigation/native';
 
 
 export const AdminScheduleForm = () => {
-  const [startTime, setStartTime] = useState('');
-  const [endTime, setEndTime] = useState('');
+  const [startTime, setStartTime] = useState(new Date());
+  const [endTime, setEndTime] = useState(new Date());
   const [repeat, setRepeat] = useState(false);
+  const [date, setDate] = useState(new Date());
+  const [show, setShow] = useState(false);
+  const [currentTimeSetter, setCurrentTimeSetter] = useState(() => () => {});
+  const navigation = useNavigation()
 
-  const handleSubmit = () => {
-    // Handle the form submission logic
-    console.log({ startTime, endTime, repeat });
+  const handleTimeChange = (newTime, setTime) => {
+    setTime(newTime);
+    setShow(false);
+  }
+
+  const showTimePicker = (time, setTime) => {
+    setDate(time);
+    setShow(true);
+    setCurrentTimeSetter(() => (newTime) => handleTimeChange(newTime, setTime));
+  }
+
+
+  const handleSubmit = async() => {
+    
+    const submitForm = {
+      timeStart : FormatHourAndMinute(startTime),
+      timeEnd : FormatHourAndMinute(endTime),
+      repeat
+    }
+    try {
+      const token = await access_token()
+      const {data} = await axios.post(`${BASE_URL}/admin/schedules`, submitForm, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
+      navigation.navigate('Schedules')
+    } catch (error) {
+      Toast.error(error.response.data.message)
+    }
+    
   };
-
+console.log(date);
   return (
     <View className={`p-4`}>
-      <TextInput
+    
+    {show && (
+        <DateTimePicker
+          testID="dateTimePicker"
+          value={date}
+          mode='time'
+          is24Hour={true}
+          display="default"
+          onChange={(event, selectedDate) => {
+            if (selectedDate) {
+              currentTimeSetter(selectedDate);
+            } else {
+              setShow(false);
+            }
+          }}
+        />
+      )}
+       <TextInput
+        onPressIn={() => showTimePicker(startTime, setStartTime)}
         className={`border p-2 rounded mb-4`}
-        value={startTime}
-        onChangeText={setStartTime}
+        // editable={false} 
+        value={FormatHourAndMinute(startTime)}
         placeholder="Start Time"
       />
       <TextInput
+        onPressIn={() => showTimePicker(endTime, setEndTime)}
         className={`border p-2 rounded mb-4`}
-        value={endTime}
-        onChangeText={setEndTime}
+        // editable={false} 
+        value={FormatHourAndMinute(endTime)}
         placeholder="End Time"
       />
       <View className={`flex-row items-center justify-beeen mb-4`}>

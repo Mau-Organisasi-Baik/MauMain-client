@@ -1,11 +1,14 @@
-import { useEffect, useState } from "react"
-import { AdminReservationCard } from "../../components/AdminReservationCard"
+import { useContext, useEffect, useState } from "react"
+import { AdminReservationCard } from "../../components/card/AdminReservationCard"
 import { FlatList, ScrollView } from 'react-native'
 import axios from "axios"
 import { BASE_URL } from "../../helpers/BASE_URL"
 import { access_token } from "../../helpers/AccessToken"
+import { LoginContext } from "../../context/AuthContext"
 export const AdminReservation = () => {
     const [reservations, setReservations] = useState([])
+    const {userSession} = useContext(LoginContext)
+    console.log(userSession);
     useEffect(() => {
         const asyncFn = async() => {
             const token = await access_token()
@@ -18,7 +21,6 @@ export const AdminReservation = () => {
         }
         asyncFn()
     }, [])
-    console.log(reservations);
     return (
         <>
        <FlatList
@@ -26,12 +28,7 @@ export const AdminReservation = () => {
             keyExtractor={item => item.id}
             renderItem={({ item }) => <AdminReservationCard reservation={item} />}
         />
-        {/* <ScrollView>
-        
-        <AdminReservationCard/>
-        <AdminReservationCard/>
-        <AdminReservationCard/>
-        </ScrollView> */}
+
         </>
     )
 }
