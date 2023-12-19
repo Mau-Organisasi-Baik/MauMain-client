@@ -88,7 +88,7 @@ export const PlayerNormalCard = ({ player }) => {
           </Text>
           <Text
             // todo: chat
-            onPress={() => {}}
+            onPress={() => {navigation.navigate('Chat', {playerId : player._id})}}
             className={`text-white mx-1 bg-slate-300 p-2 rounded-md`}
           >
             Chat

@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import * as TalkRn from '@talkjs/expo';
+import { LoginContext } from '../../context/AuthContext';
 
 function ConversationListComponent({navigation}) {
+  const {userInfo} = useContext(LoginContext)
+  
   const me = {
-    id: 'current_user_id',
-    name: 'Current User Name',
+    id: userInfo.playerId,
+    name: userInfo.username,
     // other properties
   };
 
