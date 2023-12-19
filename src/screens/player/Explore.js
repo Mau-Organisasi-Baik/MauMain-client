@@ -26,7 +26,7 @@ function FieldMarker({ field, handler, mapviewRef }) {
   return (
     <Marker
       onPress={() => {
-        handler()
+        handler();
       }}
       coordinate={{
         latitude: coordinates[0],
@@ -39,7 +39,7 @@ function FieldMarker({ field, handler, mapviewRef }) {
 }
 
 export const Explore = () => {
-  const {userInfo} = useContext(LoginContext)
+  const { userInfo } = useContext(LoginContext);
 
   const [isDrawerVisible, setIsDrawerVisible] = useState(false);
   const [location, setLocation] = useState(null);
@@ -52,15 +52,12 @@ export const Explore = () => {
   }
 
   async function fetchFields() {
-    
-    
-
     try {
       const {
         coords: { longitude, latitude },
       } = location;
 
-      const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL
+      const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
 
       let url = `${BASE_URL}/fields/explore?longitude=${longitude}&latitude=${latitude}`;
 
@@ -68,8 +65,8 @@ export const Explore = () => {
         url += `&tagId=${selectedTag._id}`;
       }
 
-      const token = userInfo.access_token
-      console.log(token);
+      const token = userInfo.access_token;
+
       const {
         data: { data },
       } = await axios.get(url, {
@@ -95,9 +92,9 @@ export const Explore = () => {
         return;
       }
 
-      let newLocation = await Location.getCurrentPositionAsync({});
       console.log(newLocation);
-      
+      let newLocation = await Location.getCurrentPositionAsync({});
+
       setLocation(newLocation);
     })();
   }, []);

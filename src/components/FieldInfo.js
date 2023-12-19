@@ -58,13 +58,8 @@ export function PlayerFieldInfo({ field, schedule, tag }) {
   return (
     <>
       <View className="bg-white border border-black rounded-lg my-4 w-full">
-        <View>
-          <View className="flex-row items-center self-end">
-            <Text>Invite Friend</Text>
-            <TouchableOpacity className="px-3 py-1 rounded-full m-2 bg-blue-500">
-              <Text className="text-white text-center text-xl">+</Text>
-            </TouchableOpacity>
-          </View>
+        <View className="py-4">
+          
           <Image className="mx-auto rounded-xl w-5/6 h-36 object-cover" source={selectedPhoto} />
           <View className="flex-row justify-between items-center p-4">
             <Text className="text-lg text-black font-bold">{name}</Text>
