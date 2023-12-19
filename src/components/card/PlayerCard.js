@@ -3,6 +3,8 @@ import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import { BASE_URL } from "../../helpers/BASE_URL";
 import { Toast } from "toastify-react-native";
+import { useContext } from "react";
+import { LoginContext } from "../../context/AuthContext";
 
 export const PlayerCard = ({ gameStatus, style, fieldId, setPlayers, player, onPress, admin }) => {
   const { userInfo } = useContext(LoginContext);
@@ -54,8 +56,12 @@ export const PlayerCard = ({ gameStatus, style, fieldId, setPlayers, player, onP
 };
 
 export const PlayerNormalCard = ({ player }) => {
-  const { name, exp } = player;
+  const { userInfo } = useContext(LoginContext);
+
+  const { name, exp, _id } = player;
   const navigation = useNavigation();
+
+  const isHimself = _id === userInfo.playerId;
 
   return (
     <TouchableOpacity
@@ -70,23 +76,25 @@ export const PlayerNormalCard = ({ player }) => {
         <Text className={`flex-1 text-white text-sm`}>Level: {Math.floor(exp / 1000)}</Text>
       </View>
 
-      <View className="flex-1 flex-row-reverse">
-        <Text
-          onPress={() => {
-            // todo: add friend
-          }}
-          className={`text-white mx-1 bg-slate-300 p-2 rounded-md`}
-        >
-          Add Friend +
-        </Text>
-        <Text
-          // todo: chat
-          onPress={() => {}}
-          className={`text-white mx-1 bg-slate-300 p-2 rounded-md`}
-        >
-          Chat
-        </Text>
-      </View>
+      {!isHimself && (
+        <View className="flex-1 flex-row-reverse">
+          <Text
+            onPress={() => {
+              // todo: add friend
+            }}
+            className={`text-white mx-1 bg-slate-300 p-2 rounded-md`}
+          >
+            Add Friend +
+          </Text>
+          <Text
+            // todo: chat
+            onPress={() => {}}
+            className={`text-white mx-1 bg-slate-300 p-2 rounded-md`}
+          >
+            Chat
+          </Text>
+        </View>
+      )}
     </TouchableOpacity>
   );
 };

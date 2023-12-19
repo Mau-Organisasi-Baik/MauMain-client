@@ -14,7 +14,6 @@ import { useContext } from "react";
 export const StackNavigator = () => {
   const Stack = createStackNavigator();
   const { isLoggedIn, userInfo } = useContext(LoginContext);
-  console.log(userInfo);
   return (
     <Stack.Navigator>
       {isLoggedIn && userInfo ? (

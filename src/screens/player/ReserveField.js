@@ -1,10 +1,13 @@
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { Button, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { PlayerCard, PlayerNormalCard } from "../../components/card/PlayerCard";
 import { FieldInfo, PlayerFieldInfo } from "../../components/FieldInfo";
 import BookModal from "../../components/modal/BookModal";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { access_token } from "../../helpers/AccessToken";
+import { Ionicons } from "@expo/vector-icons";
+import { LoginContext } from "../../context/AuthContext";
+import { Toast } from "toastify-react-native";
+
 const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
 
 function CasualReservation({ reservation }) {
@@ -24,25 +27,28 @@ function CompetitiveReservation({ reservation }) {
 
   // todo: backend-teaming
 
+  const teamAPlayers = players.filter((player) => player.team === "A");
+  const teamBPlayers = players.filter((player) => player.team === "B");
+
   return (
     <>
       <Text className={`text-white text-xl mb-2`}>TEAM A</Text>
-      {/* <PlayerCard style={{ borderColor: "orange", borderWidth: 2 }} playerName="Jinx Pro Amanda" playerStatus="Chat" onPress={() => {}} />
+      {teamAPlayers.map((player, idx) => {
+        return <PlayerNormalCard key={idx} player={player} onPress={() => {}} />;
+      })}
 
-      <PlayerCard playerName="Jinx Pro Baix" playerStatus="Chat" onPress={() => {}} />
-      <PlayerCard playerName="Boom_AnakBaix" playerStatus="Chat" onPress={() => {}} />
-      <PlayerCard playerName="InYourDream" playerStatus="Chat" onPress={() => {}} />
-      <PlayerCard playerName="MauBaix" playerStatus="Chat" onPress={() => {}} />
       <Text className={`text-white text-xl my-2 mb-2`}>TEAM B</Text>
-      <PlayerCard playerName="Budi543" playerStatus="Chat" onPress={() => {}} />
-      <PlayerCard playerName="EVOS_baixPro" playerStatus="Chat" onPress={() => {}} />
-      <PlayerCard playerName="EVOS_DEWA" playerStatus="Chat" onPress={() => {}} />
-      <PlayerCard playerName="MauJahat546" playerStatus="Chat" onPress={() => {}} /> */}
+      {teamBPlayers.map((player, idx) => {
+        return <PlayerNormalCard key={idx} player={player} onPress={() => {}} />;
+      })}
     </>
   );
 }
 
-function UpcomingReservation({ reservation, field, toggleindicator }) {
+function UpcomingReservation({ reservation, field, toggleindicator, leftReservation }) {
+  const { userInfo } = useContext(LoginContext);
+  const token = userInfo.access_token;
+
   const { _id: reservationId, type, players, schedule, tag } = reservation;
 
   let content;
@@ -51,48 +57,56 @@ function UpcomingReservation({ reservation, field, toggleindicator }) {
   if (type === "casual") content = <CasualReservation reservation={reservation} />;
 
   async function joinReservation() {
-    const token = await access_token();
-
-    const url = `${BASE_URL}/reservations/${reservationId}/join`;
-    await axios.put(
-      url,
-      {},
-      {
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      }
-    );
-
-    console.log("joined");
-
-    toggleindicator();
+    try {
+      const url = `${BASE_URL}/reservations/${reservationId}/join`;
+      await axios.put(
+        url,
+        {},
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      );
+    } catch (error) {
+      Toast(error.response.data);
+    } finally {
+      toggleindicator();
+    }
   }
 
   async function leaveReservation() {
-    const token = await access_token();
+    try {
+      const url = `${BASE_URL}/reservations/${reservationId}/leave`;
+      await axios.put(
+        url,
+        {},
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      );
 
-    const url = `${BASE_URL}/reservations/${reservationId}/leave`;
-    await axios.put(
-      url,
-      {},
-      {
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      }
-    );
-
-    toggleindicator();
+      Toast.info("Left the Reservation");
+      leftReservation();
+    } catch (error) {
+      Toast.error(error.response);
+    } finally {
+      toggleindicator();
+    }
   }
 
   // todo: check already joined
+  const playerId = userInfo.playerId;
+
   const isJoined =
     players.filter((player) => {
       // todo: get player id
-      return true
-      return player._id === "playerID";
+      return player._id === playerId;
     }).length > 0;
+
+  console.log(isJoined);
 
   let buttonContent;
 
@@ -141,19 +155,23 @@ function EndedReservation({ reservation, field }) {
   );
 }
 
-export const ReserveField = ({ route }) => {
+export const ReserveField = ({ route, navigation }) => {
   const { reservationId } = route.params;
   const [reservationDetail, setReservationDetail] = useState(null);
   const [fieldDetail, setFieldDetail] = useState(null);
   const [changeIndicator, setChangeIndicator] = useState(false);
+  const { userInfo } = useContext(LoginContext);
+  const token = userInfo.access_token;
 
   function toggleindicator() {
     setChangeIndicator(!changeIndicator);
   }
 
-  async function fetchReservationDetail() {
-    const token = await access_token();
+  function leftReservation() {
+    navigation.goBack();
+  }
 
+  async function fetchReservationDetail() {
     const url = `${BASE_URL}/reservations/${reservationId}`;
     const {
       data: { data },
@@ -181,39 +199,19 @@ export const ReserveField = ({ route }) => {
 
   useEffect(() => {
     fetchReservationDetail();
-  }, []);
+
+    navigation.setOptions({
+      headerRight: () => <Ionicons name={"person-add"} />,
+    });
+  }, [changeIndicator]);
 
   if (!reservationDetail) return <></>;
 
   const { status } = reservationDetail;
 
   if (status === "ended") return <EndedReservation reservation={reservationDetail} field={fieldDetail} />;
-  if (status === "upcoming") return <UpcomingReservation reservation={reservationDetail} field={fieldDetail} toggleindicator={toggleindicator} />;
-
-  const [modalVisible, setModalVisible] = useState(false);
-  return (
-    <>
-      <View className={`flex-1 bg-blue-900 p-4`}>
-        <FieldInfo />
-        <ScrollView className={`mb-4`}>
-          <Text className={`text-white text-xl mb-2`}>TEAM A</Text>
-          <PlayerCard style={{ borderColor: "orange", borderWidth: 2 }} playerName="Jinx Pro Amanda" playerStatus="Chat" onPress={() => {}} />
-
-          <PlayerCard playerName="Jinx Pro Baix" playerStatus="Chat" onPress={() => {}} />
-          <PlayerCard playerName="Boom_AnakBaix" playerStatus="Chat" onPress={() => {}} />
-          <PlayerCard playerName="InYourDream" playerStatus="Chat" onPress={() => {}} />
-          <PlayerCard playerName="MauBaix" playerStatus="Chat" onPress={() => {}} />
-          <Text className={`text-white text-xl my-2 mb-2`}>TEAM B</Text>
-          <PlayerCard playerName="Budi543" playerStatus="Chat" onPress={() => {}} />
-          <PlayerCard playerName="EVOS_baixPro" playerStatus="Chat" onPress={() => {}} />
-          <PlayerCard playerName="EVOS_DEWA" playerStatus="Chat" onPress={() => {}} />
-          <PlayerCard playerName="MauJahat546" playerStatus="Chat" onPress={() => {}} />
-        </ScrollView>
-        <TouchableOpacity onPress={() => setModalVisible(true)} className={`bg-blue-700 p-4 rounded-full`}>
-          <Text className={`text-white text-center text-lg`}>BOOK</Text>
-        </TouchableOpacity>
-      </View>
-      {modalVisible && <BookModal modalVisible={modalVisible} setModalVisible={setModalVisible} />}
-    </>
-  );
+  if (status === "upcoming")
+    return (
+      <UpcomingReservation reservation={reservationDetail} field={fieldDetail} toggleindicator={toggleindicator} leftReservation={leftReservation} />
+    );
 };

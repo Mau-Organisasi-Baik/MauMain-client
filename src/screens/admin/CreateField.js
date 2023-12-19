@@ -1,170 +1,184 @@
-import { useState } from "react";
-import { Image, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native"
+import { useContext, useEffect, useState } from "react";
+import { Button, Image, Pressable, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { AddTagsModal } from "../../components/modal/AddTagsModal";
-import * as ImagePicker from 'expo-image-picker';
+import * as ImagePicker from "expo-image-picker";
 import { Toast } from "toastify-react-native";
 import { requestPermission } from "../../helpers/UploadImage";
-import { access_token } from "../../helpers/AccessToken";
 import axios from "axios";
-import { BASE_URL } from "../../helpers/BASE_URL";
+import { LoginContext } from "../../context/AuthContext";
+const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
 
-export const CreateField = () => {
-    const [modalVisible, setModalVisible] = useState(false);
-    const [inputValues, setInputValues] = useState({
-      name : '',
-      address : '',
-      tagIds : [],
-      photos : [],
-      coordinates : []
-    })
-    const inputHandler = (inputIdentifier, enteredValue) => {
-      setInputValues(currValue => {
-        return {
-          ...currValue,
-          [inputIdentifier] : enteredValue
-        }
-        
-      })
-    }
+const DEFAULT_IMAGE = "https://via.placeholder.com/600x400";
 
-    const pickMultipleImage = async() => {
-        try {
-          const hasPermission = await requestPermission();
-          if (!hasPermission) return;
-        
-          let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsMultipleSelection : true,
-            aspect: [4, 3],
-            quality: 1,
-          });
-        
-          if (!result.canceled) {
-            await uploadMultipleImages(result.assets[0].uri)
-          }
-          
-        } catch (error) {
-        //   Toast.error(error)
-        console.log(error);
-        }
-      }
-    const uploadMultipleImages = async (imageUris) => {
-        const token = await access_token()
-        const formData = new FormData();
-        
-        formData.append('name', inputValues.name);
-        formData.append('address', inputValues.address);
-      
-        formData.append('coordinates', JSON.stringify([3132,313123]));
+export const CreateField = ({ navigation, route }) => {
+  const { userInfo } = useContext(LoginContext);
+  const [inputValues, setInputValues] = useState({
+    name: "",
+    address: "",
+  });
 
-        inputValues.tagIds.forEach(tagId => {
-          console.log(tagId);
-          formData.append('tagIds', 'dasdsda');
-        });
-  
-        if (Array.isArray(imageUris) && imageUris.length) {
-          imageUris.forEach((uri, index) => {
-            formData.append('photos', { 
-              uri,
-              type: 'image/jpeg',
-              name: `photo_${index}.jpg`,
-            });
-          })
-        }
-      
-        try {
-        console.log(inputValues);
-          const response = await axios.post(`${BASE_URL}/admin/profile`, formData, {
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'multipart/form-data'
-            },
-          });
-          console.log(response.data);
-        } catch (error) {
-         console.log(error.response.data);
-        }
+  const [selectedTags, setSelectedTags] = useState([]);
+  const [selectedImage, setSelectedImage] = useState({
+    name: "",
+    uri: DEFAULT_IMAGE,
+  });
+
+  let coordinates = [];
+  if (route.params?.coordinates) {
+    coordinates = route.params.coordinates;
+  }
+
+  if (coordinates.length === 2) {
+    coordinateText = `${coordinates[0]}, ${coordinates[1]}`;
+  } else {
+    coordinateText = "not set";
+  }
+
+  const inputHandler = (inputIdentifier, enteredValue) => {
+    setInputValues((currValue) => {
+      return {
+        ...currValue,
+        [inputIdentifier]: enteredValue,
       };
-    return (
-        <>
-    <ScrollView className={('bg-gray-100')}>
-      <View className={('p-4')}>
-        
-        <ScrollView
-         horizontal
-         className={('mb-4')}
-         showsHorizontalScrollIndicator={false}
-         contentContainerStyle={{ alignItems: 'center' }}>
-          {/* {adminField?.photoUrls.map((e) => {
-            return <Image
-            className="h-40 w-40 rounded-lg mr-2" // Set a width and add margin-right for spacing
-            source={{uri : e}}
-            />
-          })} */}
-          {inputValues.photos.map(photo => {
-            return (
-              <>
-              <TouchableOpacity onPress={pickMultipleImage}>
-              <Image
-              className="h-40 w-40 rounded-lg mr-2"
-              source={{ uri: photo }}
-              />
-              </TouchableOpacity>
-              </>
-            )
-          })}
-        <TouchableOpacity onPress={pickMultipleImage}>
-        <Image
-        className="h-40 w-40 rounded-lg mr-2"
-        source={{ uri: 'https://via.placeholder.com/150' }}
-        />
-        </TouchableOpacity>
-  
-        </ScrollView>
-        <View className={('')}>
-          <View className={('flex-1')}>
-            <Text className={('text-xl font-bold')}>Field</Text>
-            <TextInput 
-              placeholder="Your Field"
-              onChangeText={inputHandler.bind(this, 'name')}
-            />
-          </View>
-          {/* Tags */}
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} className={('')}>
-          {/* {adminField?.tags.map((tag, idx) => {
-            return (
-              <View className={('bg-blue-200 rounded-full px-3 py-1 m-1')}>
-                <Text className={('text-blue-800')}>{tag}</Text>
-              </View>
-            )
-            
-          })} */}
-            <TouchableOpacity onPress={() =>setModalVisible(true)} className={('bg-gray-400 rounded-full px-3 py-1 m-1')}>
-              <Text className={('text-white')}>+</Text>
-            </TouchableOpacity>
-       
-          </ScrollView>
-        </View>
-        {/* Address */}
-        <View className={('my-14')}>
-          <Text className={('text-lg font-semibold')}>Address</Text>
-          <TextInput 
-              placeholder="Your address"
-              onChangeText={inputHandler.bind(this, 'address')}
-            />
-          <Text className={('text-gray-600 py-2')}></Text>
-          <TouchableOpacity className={('bg-purple-500 w-1/2 my-2 px-4 py-2 rounded-lg')}>
-            <Text className={('text-white text-center')}>UPDATE LOKASI</Text>
-          </TouchableOpacity>
-        </View>
-        {/* Buttons */}
-        <View className={('my-2')}>
-      
-        </View>
-      </View>
-    </ScrollView>
-    {modalVisible && <AddTagsModal modalVisible={modalVisible} setModalVisible={setModalVisible} />}
-        </>
-    )
+    });
+  };
 
-}
+  const pickMultipleImage = async () => {
+    try {
+      const hasPermission = await requestPermission();
+      if (!hasPermission) return;
+
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsMultipleSelection: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+
+      if (result.uri) {
+        console.log(result);
+
+        const { uri } = result;
+        setSelectedImage({ uri });
+      } else {
+        setSelectedImage({ uri: DEFAULT_IMAGE });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  async function fieldSubmitHandler() {
+    try {
+      const { address, name } = inputValues;
+      const tagIds = selectedTags.map((tag) => tag._id).join(", ");
+
+      let parsedCoordinates = "";
+
+      if (coordinates.length === 2) {
+        parsedCoordinates = coordinates.join(", ");
+      }
+
+      console.log("abcdef");
+      const url = `${BASE_URL}/admin/profile`;
+      const formData = new FormData();
+
+      if (selectedImage.uri === DEFAULT_IMAGE) {
+        return Toast.error("Please insert field photo");
+      }
+
+      if (!name) {
+        return Toast.error("Please insert field name");
+      }
+
+      if (!tagIds) {
+        return Toast.error("Please insert any sport tag");
+      }
+
+      if (!address) {
+        return Toast.error("Please insert field address");
+      }
+
+      if (!parsedCoordinates) {
+        return Toast.error("Please pin field location");
+      }
+
+      formData.append("address", address);
+      formData.append("name", name);
+      formData.append("tagIds", tagIds);
+      formData.append("coordinates", parsedCoordinates);
+      formData.append("photos", [
+        {
+          type: photo.type,
+          uri: Platform.OS === "ios" ? photo.uri.replace("file://", "") : photo.uri,
+        },
+      ]);
+
+      await axios({
+        url,
+        method: "post",
+        headers: {
+          Authorization: "Bearer " + userInfo.access_token,
+        },
+        data: formData,
+      });
+
+      Toast.success("OKEEEE");
+    } catch (error) {
+      console.log(error);
+
+      Toast.error(error.response.data.message);
+    }
+  }
+
+  return (
+    <>
+      <ScrollView className={"bg-gray-100 flex"}>
+        <View className={"p-4"}>
+          <View horizontal className={"mb-4 w-full"} showsHorizontalScrollIndicator={false} contentContainerStyle={{ alignItems: "center" }}>
+            <TouchableOpacity onPress={pickMultipleImage} style={{ flex: 1 }}>
+              <Image className="h-40 w-full rounded-lg mr-2 flex flex-1" source={selectedImage} />
+            </TouchableOpacity>
+          </View>
+          <View>
+            <View className={"flex-1 my-4"}>
+              <Text className={"text-xl font-bold"}>Field</Text>
+              <TextInput
+                value={inputValues.name}
+                style={{ paddingVertical: 10, borderBottomColor: "grey", borderBottomWidth: 1 }}
+                placeholder="Your Field Name"
+                onChangeText={(text) => inputHandler("name", text)}
+              />
+            </View>
+
+            <Text className={"text-xl font-bold my-2"}>Sport tags</Text>
+            <AddTagsModal selectedTags={selectedTags} setSelectedTags={setSelectedTags} />
+          </View>
+          {/* Address */}
+          <View className={"my-12"}>
+            <Text className={"text-lg font-semibold"}>Address</Text>
+            <TextInput
+              value={inputValues.address}
+              style={{
+                borderBottomColor: "grey",
+                borderBottomWidth: 1,
+              }}
+              multiline={true}
+              numberOfLines={4}
+              placeholder="Your address"
+              onChangeText={(text) => inputHandler("address", text)}
+            />
+
+            <TouchableOpacity className={"bg-purple-500 w-full my-2 px-4 py-2 rounded-lg"} onPress={() => navigation.navigate("pinpointField")}>
+              <Text className={"text-white text-center"}>Pin Location ({coordinateText})</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        <Pressable style={{ padding: 15, width: "100%", backgroundColor: "rgb(27, 117, 208)", alignItems: "center" }} onPress={fieldSubmitHandler}>
+          <Text>Create Profile</Text>
+        </Pressable>
+      </ScrollView>
+    </>
+  );
+};

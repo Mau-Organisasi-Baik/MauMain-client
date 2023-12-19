@@ -38,8 +38,6 @@ export const BookModal = ({ modalVisible, setModalVisible, bookInformation, togg
       },
     });
 
-    console.log(data.field);
-
     setTags(data.field.tags);
   }
 
