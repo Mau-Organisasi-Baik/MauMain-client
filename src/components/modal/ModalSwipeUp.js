@@ -1,11 +1,15 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { ScrollView, Animated, Image, View, Text, TouchableOpacity } from "react-native";
 import axios from "axios";
-import { access_token } from "../../helpers/AccessToken";
+import { LoginContext } from "../../context/AuthContext";
+
 const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
 
 function SkeletonDrawer() {
+  const { userInfo } = useContext(LoginContext);
+  const token = userInfo.access_token;
+
   return (
     <View className={`p-4`}>
       <ScrollView>
@@ -24,6 +28,9 @@ function SkeletonDrawer() {
 }
 
 const BottomDrawer = ({ isDrawerOpen, setIsDrawerOpen, fieldId }) => {
+  const { userInfo } = useContext(LoginContext);
+  const token = userInfo.access_token;
+
   const drawerHeight = useRef(new Animated.Value(0)).current; // Initial height for the drawer
   const navigation = useNavigation();
 
@@ -38,8 +45,6 @@ const BottomDrawer = ({ isDrawerOpen, setIsDrawerOpen, fieldId }) => {
   const [fieldDetail, setFieldDetail] = useState(null);
 
   async function fetchFieldDetail() {
-    const token = await access_token();
-
     const url = `${BASE_URL}/fields/${fieldId}`;
 
     const {
@@ -86,7 +91,7 @@ const BottomDrawer = ({ isDrawerOpen, setIsDrawerOpen, fieldId }) => {
             })}
           </View>
           <View className=" my-4">
-            <TouchableOpacity onPress={() => navigation.navigate("Reservation Card", {fieldId})} className="bg-blue-500 px-14 py-2  rounded-lg">
+            <TouchableOpacity onPress={() => navigation.navigate("Reservation Card", { fieldId })} className="bg-blue-500 px-14 py-2  rounded-lg">
               <Text className="text-lg text-center tracking-wider">See Reservations</Text>
             </TouchableOpacity>
           </View>

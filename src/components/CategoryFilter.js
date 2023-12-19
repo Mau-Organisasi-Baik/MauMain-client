@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ScrollView, TouchableOpacity, Text, StyleSheet, View, SafeAreaView, StatusBar } from "react-native";
 import axios from "axios";
+import { Toast } from "toastify-react-native";
 const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
 
 const categories = ["Football", "Basketball", "Tennis", "Badminton", "Volley"];
@@ -16,7 +17,7 @@ const CategoryFilter = ({ selectedTag, changeTag }) => {
 
       setTags(data.tags);
     } catch (error) {
-      console.log(error);
+      Toast.error(error.message);
     }
   }
 

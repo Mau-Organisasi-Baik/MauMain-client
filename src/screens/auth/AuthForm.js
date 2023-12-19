@@ -28,7 +28,6 @@ export function LoginForm({ navigation }) {
   const submitForm = async () => {
     try {
       const url = `${BASE_URL}/login`;
-      console.log(inputValues);
       const {
         data: { data },
       } = await axios.post(url, inputValues);

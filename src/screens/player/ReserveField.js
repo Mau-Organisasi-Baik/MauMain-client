@@ -42,30 +42,71 @@ function CompetitiveReservation({ reservation }) {
   );
 }
 
-function UpcomingReservation({ reservation, field }) {
-  const { type, players, schedule, tag } = reservation;
+function UpcomingReservation({ reservation, field, toggleindicator }) {
+  const { _id: reservationId, type, players, schedule, tag } = reservation;
 
   let content;
 
   if (type === "competitive") content = <CompetitiveReservation reservation={reservation} />;
   if (type === "casual") content = <CasualReservation reservation={reservation} />;
 
+  async function joinReservation() {
+    const token = await access_token();
+
+    const url = `${BASE_URL}/reservations/${reservationId}/join`;
+    await axios.put(
+      url,
+      {},
+      {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
+
+    console.log("joined");
+
+    toggleindicator();
+  }
+
+  async function leaveReservation() {
+    const token = await access_token();
+
+    const url = `${BASE_URL}/reservations/${reservationId}/leave`;
+    await axios.put(
+      url,
+      {},
+      {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
+
+    toggleindicator();
+  }
+
   // todo: check already joined
   const isJoined =
     players.filter((player) => {
       // todo: get player id
-      return player._id === "playerID"
+      return true
+      return player._id === "playerID";
     }).length > 0;
 
-  let buttonContent = (
-    <TouchableOpacity className={`bg-blue-700 p-4 rounded-full`}>
-      <Text className={`text-white text-center text-lg`}>JOIN</Text>
-    </TouchableOpacity>
-  );
+  let buttonContent;
+
+  if (players.length < tag.limit) {
+    buttonContent = (
+      <TouchableOpacity className={`bg-blue-700 p-4 rounded-full`} onPress={() => joinReservation()}>
+        <Text className={`text-white text-center text-lg`}>JOIN</Text>
+      </TouchableOpacity>
+    );
+  }
 
   if (isJoined) {
     buttonContent = (
-      <TouchableOpacity className={`bg-red-700 p-4 rounded-full`}>
+      <TouchableOpacity className={`bg-red-700 p-4 rounded-full`} onPress={() => leaveReservation()}>
         <Text className={`text-white text-center text-lg`}>LEAVE</Text>
       </TouchableOpacity>
     );
@@ -104,6 +145,11 @@ export const ReserveField = ({ route }) => {
   const { reservationId } = route.params;
   const [reservationDetail, setReservationDetail] = useState(null);
   const [fieldDetail, setFieldDetail] = useState(null);
+  const [changeIndicator, setChangeIndicator] = useState(false);
+
+  function toggleindicator() {
+    setChangeIndicator(!changeIndicator);
+  }
 
   async function fetchReservationDetail() {
     const token = await access_token();
@@ -142,7 +188,7 @@ export const ReserveField = ({ route }) => {
   const { status } = reservationDetail;
 
   if (status === "ended") return <EndedReservation reservation={reservationDetail} field={fieldDetail} />;
-  if (status === "upcoming") return <UpcomingReservation reservation={reservationDetail} field={fieldDetail} />;
+  if (status === "upcoming") return <UpcomingReservation reservation={reservationDetail} field={fieldDetail} toggleindicator={toggleindicator} />;
 
   const [modalVisible, setModalVisible] = useState(false);
   return (

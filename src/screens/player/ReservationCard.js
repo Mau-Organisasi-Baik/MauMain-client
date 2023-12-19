@@ -2,9 +2,10 @@ import { Ionicons } from "@expo/vector-icons";
 import { Text, TouchableOpacity, View } from "react-native";
 import axios from "axios";
 import { access_token } from "../../helpers/AccessToken";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import ReservationItem from "../../components/PlayerReservationItem";
 import BookModal from "../../components/modal/BookModal";
+import { useFocusEffect } from "@react-navigation/native";
 const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
 
 export const ReservationCard = ({ navigation, route }) => {
@@ -17,6 +18,17 @@ export const ReservationCard = ({ navigation, route }) => {
     fieldId,
     schedule: null,
   });
+
+  function toggleIndicator() {
+    setIndicator(!indicator);
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchReservations();
+      return () => {};
+    }, [])
+  );
 
   async function fetchReservations() {
     try {
@@ -65,7 +77,14 @@ export const ReservationCard = ({ navigation, route }) => {
         return <ReservationItem key={idx} reservation={reservation} navigateReservation={navigateToReservation} navigateBook={navigateToBook} />;
       })}
 
-      {modalVisible && <BookModal modalVisible={modalVisible} setModalVisible={setModalVisible} bookInformation={bookInformation} />}
+      {modalVisible && (
+        <BookModal
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+          bookInformation={bookInformation}
+          toggleIndicator={toggleIndicator}
+        />
+      )}
     </>
   );
 
