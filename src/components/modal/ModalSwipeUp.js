@@ -13,7 +13,7 @@ function SkeletonDrawer() {
   return (
     <View className={`p-4`}>
       <ScrollView>
-        <Image className=" mx-auto shadow-xl rounded-xl w-full h-64 object-cover" source={require("../../assets/lapangan.jpg")} />
+        <Image className=" mx-auto rounded-xl w-full h-64 object-cover" source={require("../../assets/lapangan.jpg")} />
 
         <Text className=" text-xl font-bold">Lapangan</Text>
         <View className={"flex flex-row"}></View>

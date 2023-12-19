@@ -1,6 +1,5 @@
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import { getScheduleTime } from "../helpers/ScheduleTime";
-import { GetUtcHours } from "../helpers/GetUtcHours";
 
 export const FieldInfo = ({ admin, detailField }) => {
   const backgroundColor = detailField.status === "upcoming" ? "bg-blue-400" : "bg-red-400";
@@ -20,8 +19,8 @@ export const FieldInfo = ({ admin, detailField }) => {
           <Image className="mx-auto rounded-xl w-5/6 h-36 object-cover" source={require("../assets/lapangan.jpg")} />
           <View className="flex-row justify-between items-center p-4">
             <Text className="text-lg text-black font-bold">{detailField._id}</Text>
-            <Text className="px-1 bg-green-300 text-center rounded-lg">{`${detailField.schedule && GetUtcHours(detailField.schedule.TimeStart)} : ${
-              detailField.schedule && GetUtcHours(detailField.schedule.TimeEnd)
+            <Text className="px-1 bg-green-300 text-center rounded-lg">{`${detailField.schedule && getScheduleTime(detailField.schedule.TimeStart)} : ${
+              detailField.schedule && getScheduleTime(detailField.schedule.TimeEnd)
             }`}</Text>
           </View>
           <View className="pl-4 py-2">
