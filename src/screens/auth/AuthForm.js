@@ -9,6 +9,7 @@ import { LoginContext } from "../../context/AuthContext";
 
 const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
 
+
 const AuthForm = ({ navigation }) => {
   const { name } = useRoute();
   const { LoginAction, UserInfo } = useContext(LoginContext);
@@ -36,8 +37,7 @@ const AuthForm = ({ navigation }) => {
   const submitForm = async () => {
     try {
       const { data } = await axios.post(`${BASE_URL}/${uri}`, inputValues);
-      console.log(data);
-      console.log("bawah data");
+
       if (!registerScreen) {
         await LoginAction("access_token", data.data.access_token);
         await UserInfo("user_info", data.data.role);
@@ -52,6 +52,7 @@ const AuthForm = ({ navigation }) => {
         Toast.error(error.request);
       } else {
         Toast.error("Error", error.message);
+
       }
     }
   };

@@ -3,6 +3,7 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 
 import ConversationListComponent from './ConversationList';
 import NotificationPopup from './Notification';
+import ChatComponent from './Chat';
 
 const TopTab = createMaterialTopTabNavigator();
 
@@ -28,7 +29,7 @@ export const Inbox = () => {
       />
       <TopTab.Screen
         name="Chat"
-        component={ConversationListComponent}
+        component={ChatComponent}
         options={{ tabBarLabel: 'CHAT' }}
       />
     </TopTab.Navigator>
