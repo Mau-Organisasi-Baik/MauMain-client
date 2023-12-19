@@ -4,37 +4,46 @@ import { access_token } from '../../helpers/AccessToken';
 import axios from 'axios';
 import { BASE_URL } from '../../helpers/BASE_URL';
 import { LoginContext } from '../../context/AuthContext';
+import { useRoute } from '@react-navigation/native';
 
-export default function ChatComponent(props) {
+export default function ChatComponent() {
+  const route = useRoute()
   const [profileData, setProfileData] = useState({})
+  const [otherUser, setOtherUser] = useState({})
+  const {playerId} = route.params
+  const test = playerId || null
+  
   const {userInfo} = useContext(LoginContext)
+  const token = userInfo.access_token
   useEffect(() => {
     const asyncFn = async() => {
-      const token = await access_token()
       const {data} = await axios.get(`${BASE_URL}/profile`, {
         headers : {
           Authorization : `Bearer ${token}`
         }
       })
-      setProfileData(data.data.user)
+      const response = await axios.get(`${BASE_URL}/profile/${playerId}`, {
+        headers : {
+          Authorization : `Bearer ${token}`
+        }
+      })
+      setOtherUser(response.data.data.user)
     }
     asyncFn()
   }, [])
-  console.log(profileData);
+  console.log(otherUser);
   const me = {
     id: userInfo.playerId,
     name: userInfo.username,
-    email: 'alice@example.com',
     photoUrl: profileData.profilePictureUrl,
     welcomeMessage: 'Hey there! How are you? :-)',
     role: 'default',
   };
 
   const other = {
-    id: '987654321',
-    name: 'Sebastian',
-    email: 'Sebastian@example.com',
-    photoUrl: 'https://talkjs.com/images/avatar-5.jpg',
+    id: playerId,
+    name: otherUser.name,
+    photoUrl: otherUser.profilePictureUrl,
     welcomeMessage: 'Hey, how can I help? https://google.com',
     role: 'default',
   };

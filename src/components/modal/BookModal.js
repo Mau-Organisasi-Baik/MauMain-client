@@ -57,24 +57,28 @@ export const BookModal = ({ modalVisible, setModalVisible, bookInformation, togg
       tagId: selectedSportId,
       type: selectedMode,
     });
-
-    const url = `${BASE_URL}/reservations`;
-    await axios.post(
-      url,
-      {
-        fieldId,
-        scheduleId,
-        tagId: selectedSportId,
-        type: selectedMode,
-      },
-      {
-        headers: {
-          Authorization: "Bearer " + token,
+    try {
+      const url = `${BASE_URL}/reservations`;
+      await axios.post(
+        url,
+        {
+          fieldId,
+          scheduleId,
+          tagId: selectedSportId,
+          type: selectedMode,
         },
-      }
-    );
-
-    toggleIndicator();
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      );
+  
+      toggleIndicator();
+      
+    } catch (error) {
+      console.log(error.response.data.fields);
+    }
   }
 
   return (

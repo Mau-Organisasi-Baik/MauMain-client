@@ -53,10 +53,13 @@ export const Explore = () => {
 
   async function fetchFields() {
     try {
-      const {
+      let {
         coords: { longitude, latitude },
       } = location;
 
+      latitude= -6.2607187
+      longitude= 106.7816162
+      
       const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
 
       let url = `${BASE_URL}/fields/explore?longitude=${longitude}&latitude=${latitude}`;
@@ -92,8 +95,8 @@ export const Explore = () => {
         return;
       }
 
-      console.log(newLocation);
       let newLocation = await Location.getCurrentPositionAsync({});
+      console.log(newLocation);
 
       setLocation(newLocation);
     })();

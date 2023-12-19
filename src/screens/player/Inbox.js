@@ -4,6 +4,7 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import ConversationListComponent from './ConversationList';
 import NotificationPopup from './Notification';
 import ChatComponent from './Chat';
+import { ConversationList } from '@talkjs/expo';
 
 const TopTab = createMaterialTopTabNavigator();
 
@@ -11,7 +12,7 @@ export const Inbox = () => {
   return (
     <TopTab.Navigator
       initialRouteName="Notification"
-      className=""
+      className="mb-14"
       screenOptions={{
         tabBarActiveTintColor: 'blue',
         tabBarLabelStyle: { fontSize: 12 },
@@ -29,7 +30,7 @@ export const Inbox = () => {
       />
       <TopTab.Screen
         name="Chat"
-        component={ChatComponent}
+        component={ConversationListComponent}
         options={{ tabBarLabel: 'CHAT' }}
       />
     </TopTab.Navigator>
