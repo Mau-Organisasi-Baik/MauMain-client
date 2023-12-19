@@ -41,7 +41,8 @@ export const LoginProvider = ({ children }) => {
   useEffect(() => {
     getValueFor("loginInfo").then((data) => {
       if (data) {
-        setUserInfo(JSON.parse(data));
+        setIsLoggedIn(true)
+        setUserInfo(JSON.parse(JSON.parse(data)));
       }
     });
   }, []);
