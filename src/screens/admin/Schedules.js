@@ -31,7 +31,7 @@ export const Schedules = ({navigation}) => {
             renderItem={({ item }) =>  {
               return (
                 <>
-                <ScheduleCard schedule={item}/>
+                <ScheduleCard setSchedules={setSchedules} schedule={item}/>
                 </>
               )
             }} 
