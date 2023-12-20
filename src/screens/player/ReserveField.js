@@ -1,18 +1,19 @@
-import { Button, ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { PlayerCard, PlayerNormalCard } from "../../components/card/PlayerCard";
-import { FieldInfo, PlayerFieldInfo } from "../../components/FieldInfo";
+import {  Modal, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import {  PlayerNormalCard } from "../../components/card/PlayerCard";
+import {  PlayerFieldInfo } from "../../components/FieldInfo";
 import BookModal from "../../components/modal/BookModal";
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Ionicons } from "@expo/vector-icons";
 import { LoginContext } from "../../context/AuthContext";
 import { Toast } from "toastify-react-native";
+import { InviteFriendModal } from "../../components/modal/InviteFriendModal";
 
 const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
 
 function CasualReservation({ reservation }) {
   const { players } = reservation;
-
+console.log(reservation,'test');
   return (
     <>
       {players.map((player, idx) => {
@@ -106,7 +107,7 @@ function UpcomingReservation({ reservation, field, toggleindicator, leftReservat
       return player._id === playerId;
     }).length > 0;
 
-  console.log(isJoined);
+  
 
   let buttonContent;
 
@@ -139,7 +140,7 @@ function UpcomingReservation({ reservation, field, toggleindicator, leftReservat
 
 function EndedReservation({ reservation, field }) {
   const { type, schedule, tag } = reservation;
-
+  
   let content;
 
   if (type === "competitive") content = <CompetitiveReservation reservation={reservation} />;
@@ -159,10 +160,11 @@ export const ReserveField = ({ route, navigation }) => {
   const { reservationId } = route.params;
   const [reservationDetail, setReservationDetail] = useState(null);
   const [fieldDetail, setFieldDetail] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
   const [changeIndicator, setChangeIndicator] = useState(false);
   const { userInfo } = useContext(LoginContext);
+  
   const token = userInfo.access_token;
-
   function toggleindicator() {
     setChangeIndicator(!changeIndicator);
   }
@@ -201,7 +203,11 @@ export const ReserveField = ({ route, navigation }) => {
     fetchReservationDetail();
 
     navigation.setOptions({
-      headerRight: () => <Ionicons name={"person-add"} />,
+      headerRight: () => <Ionicons
+       name={"person-add"}
+       size={24}
+       onPress={() => setModalVisible(true)}
+       />,
     });
   }, [changeIndicator]);
 
@@ -211,7 +217,13 @@ export const ReserveField = ({ route, navigation }) => {
 
   if (status === "ended") return <EndedReservation reservation={reservationDetail} field={fieldDetail} />;
   if (status === "upcoming")
-    return (
-      <UpcomingReservation reservation={reservationDetail} field={fieldDetail} toggleindicator={toggleindicator} leftReservation={leftReservation} />
+    return (<>
+    <UpcomingReservation reservation={reservationDetail} field={fieldDetail} toggleindicator={toggleindicator} leftReservation={leftReservation} />
+    {modalVisible && (
+      <InviteFriendModal fieldId={fieldId} setModalVisible={setModalVisible} modalVisible={modalVisible} />
+    )}
+    </>
+      
     );
+    
 };

@@ -30,6 +30,7 @@ export const PlayerCard = ({ gameStatus, style, fieldId, setPlayers, player, onP
     }
   };
 
+
   const navigation = useNavigation();
 
   return (
@@ -57,6 +58,24 @@ export const PlayerCard = ({ gameStatus, style, fieldId, setPlayers, player, onP
 
 export const PlayerNormalCard = ({ player }) => {
   const { userInfo } = useContext(LoginContext);
+  const token = userInfo.access_token;
+  const addFriend = async(targetPlayerId) => {
+    console.log(targetPlayerId);
+    try {
+      await axios.post(
+        `${BASE_URL}/friends`,
+        { targetPlayerId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      Toast.success('Friend Request Sent!')
+    } catch (error) {
+      Toast.error(`Friend Request Sent Already`)
+    }
+  }
 
   const { name, exp, _id } = player;
   const navigation = useNavigation();
@@ -81,6 +100,7 @@ export const PlayerNormalCard = ({ player }) => {
           <Text
             onPress={() => {
               // todo: add friend
+              addFriend(player._id)
             }}
             className={`text-white mx-1 bg-slate-300 p-2 rounded-md`}
           >
