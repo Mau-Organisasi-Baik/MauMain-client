@@ -34,17 +34,7 @@ export const Schedules = ({ navigation }) => {
   );
   return (
     <View className="flex-1 bg-pink-100">
-      <FlatList
-        data={schedules}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => {
-          return (
-            <>
-              <ScheduleCard schedule={item} />
-            </>
-          );
-        }}
-      />
+    
 
         <FlatList
             data={schedules}
