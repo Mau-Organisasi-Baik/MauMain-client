@@ -1,11 +1,5 @@
-import { useContext, useEffect, useState } from "react";
-import { Button, Image, Pressable, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { AddTagsModal } from "../../components/modal/AddTagsModal";
-import * as ImagePicker from "expo-image-picker";
-import { Toast } from "toastify-react-native";
-import { requestPermission } from "../../helpers/UploadImage";
-import axios from "axios";
-import { LoginContext } from "../../context/AuthContext";
+import { useState } from "react";
+import { Text, TouchableOpacity, View } from "react-native";
 const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
 
 import MapView, { Marker } from "react-native-maps";
@@ -61,14 +55,21 @@ export const PinpointField = ({ route, navigation }) => {
           />
         </MapView>
 
-        <View style={{}}>{/* <Image style={{ width: 100, height: 100 }} source={require("../../assets/pinpoint.png")} /> */}</View>
-
         <Text style={{ marginVertical: 10, textAlign: "center" }}>
           Coordinates: {latitude.toFixed(6)},{longitude.toFixed(6)}{" "}
         </Text>
 
         <TouchableOpacity
-          onPress={() => navigation.navigate("createField", { coordinates: [latitude.toFixed(6), longitude.toFixed(6)] })}
+          onPress={() => {
+            let prevStack;
+            if (route.params?.prev === "updateProfile") {
+              prevStack = "My Field";
+            } else if (route.params?.prev === "createProfile") {
+              prevStack = "createField";
+            }
+
+            navigation.navigate(prevStack, { coordinates: [latitude.toFixed(6), longitude.toFixed(6)] });
+          }}
           style={{ width: "100%", alignItems: "center", padding: 10, backgroundColor: "rgb(27, 117, 208)" }}
         >
           <Text>Select Pinpoint</Text>

@@ -26,6 +26,7 @@ export const LoginProvider = ({ children }) => {
   async function loginInfo(value) {
     try {
       await SecureStore.setItemAsync("loginInfo", JSON.stringify(value));
+      await checkProfileValid();
       setUserInfo(value);
     } catch (error) {
       throw error;
@@ -70,10 +71,11 @@ export const LoginProvider = ({ children }) => {
             },
           });
 
-          console.log(data);
+          if (!data.user.name || !data.user.profilePictureUrl) {
+            return setIsProfileValid(false);
+          }
 
           await SecureStore.setItemAsync("profileValid", "true");
-
           setIsProfileValid(true);
         } catch (error) {
           setIsProfileValid(false);
@@ -96,7 +98,7 @@ export const LoginProvider = ({ children }) => {
   }, []);
 
   return (
-    <LoginContext.Provider value={{ userInfo, loginInfo, isLoggedIn, setIsLoggedIn, LoginAction, LogoutAction, isProfileValid }}>
+    <LoginContext.Provider value={{ userInfo, loginInfo, isLoggedIn, setIsLoggedIn, LoginAction, LogoutAction, isProfileValid, checkProfileValid }}>
       {children}
     </LoginContext.Provider>
   );
