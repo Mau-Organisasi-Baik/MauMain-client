@@ -1,6 +1,8 @@
 import { Text, View } from "react-native";
 
 export const XPBar = ({ currentXP }) => {
+  if (!currentXP) return <></>;
+
   const level = Math.floor(currentXP / 1000);
   currentXP -= level * 1000;
   const xpPercentage = (currentXP / 1000) * 100;

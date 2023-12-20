@@ -86,7 +86,7 @@ export function LoginForm({ navigation }) {
 }
 
 export function RegisterForm({ navigation }) {
-  const { LoginAction, loginInfo } = useContext(LoginContext);
+  const { LoginAction, loginInfo,checkProfileValid } = useContext(LoginContext);
 
 
   const [inputValues, setInputValues] = useState({
@@ -116,6 +116,8 @@ export function RegisterForm({ navigation }) {
 
       await LoginAction();
       await loginInfo(data);
+
+      await checkProfileValid();
     } catch (error) {
       console.log(error.response.data);
       if (error.response) {
@@ -124,7 +126,6 @@ export function RegisterForm({ navigation }) {
         Toast.error(error.request);
       } else {
         Toast.error("Error", error.message);
-
       }
     }
   };
