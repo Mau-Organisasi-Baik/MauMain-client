@@ -43,7 +43,7 @@ export const CreateProfile = ({ navigation }) => {
 
   async function submitHandler() {
     try {
-      if (selectedImage.uri === DEFAULT_IMAGE_URI) return Toast.error("Please insert profile name");
+      if (selectedImage.uri === DEFAULT_IMAGE_URI) return Toast.error("Please insert profile photo");
       if (!name) return Toast.error("Please insert profile name");
 
       const formData = new FormData();
