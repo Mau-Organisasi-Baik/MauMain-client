@@ -1,8 +1,6 @@
-
-import {  Modal, ScrollView, Text, TouchableOpacity, View } from "react-native";
-import {  PlayerNormalCard } from "../../components/card/PlayerCard";
-import {  PlayerFieldInfo } from "../../components/FieldInfo";
-
+import { Modal, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { PlayerNormalCard } from "../../components/card/PlayerCard";
+import { PlayerFieldInfo } from "../../components/FieldInfo";
 
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
@@ -173,29 +171,33 @@ export const ReserveField = ({ route, navigation }) => {
   }
 
   async function fetchReservationDetail() {
-    const url = `${BASE_URL}/reservations/${reservationId}`;
-    const {
-      data: { data },
-    } = await axios.get(url, {
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    });
+    try {
+      const url = `${BASE_URL}/reservations/${reservationId}`;
+      const {
+        data: { data },
+      } = await axios.get(url, {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      });
 
-    setReservationDetail(data.reservation);
+      setReservationDetail(data.reservation);
 
-    const { fieldId } = data.reservation;
+      const { fieldId } = data.reservation;
 
-    const urlField = `${BASE_URL}/fields/${fieldId}`;
-    const {
-      data: { data: dataField },
-    } = await axios.get(urlField, {
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    });
+      const urlField = `${BASE_URL}/fields/${fieldId}`;
+      const {
+        data: { data: dataField },
+      } = await axios.get(urlField, {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      });
 
-    setFieldDetail(dataField.field);
+      setFieldDetail(dataField.field);
+    } catch (error) {
+      Toast.error(error.response?.data.message);
+    }
   }
 
   useEffect(() => {

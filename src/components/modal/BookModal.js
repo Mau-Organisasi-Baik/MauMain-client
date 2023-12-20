@@ -4,6 +4,7 @@ import { Picker } from "@react-native-picker/picker";
 import axios from "axios";
 import { getScheduleTime } from "../../helpers/ScheduleTime";
 import { LoginContext } from "../../context/AuthContext";
+import { Toast } from "toastify-react-native";
 const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
 
 export const BookModal = ({ modalVisible, setModalVisible, bookInformation, toggleIndicator }) => {
@@ -29,16 +30,20 @@ export const BookModal = ({ modalVisible, setModalVisible, bookInformation, togg
   const { schedule, fieldId } = bookInformation;
 
   async function fetchTagsFromField() {
-    const url = `${BASE_URL}/fields/${fieldId}`;
-    const {
-      data: { data },
-    } = await axios.get(url, {
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    });
+    try {
+      const url = `${BASE_URL}/fields/${fieldId}`;
+      const {
+        data: { data },
+      } = await axios.get(url, {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      });
 
-    setTags(data.field.tags);
+      setTags(data.field.tags);
+    } catch (error) {
+      Toast.error(error.response?.data.message);
+    }
   }
 
   useEffect(() => {
@@ -70,7 +75,7 @@ export const BookModal = ({ modalVisible, setModalVisible, bookInformation, togg
 
       toggleIndicator();
     } catch (error) {
-      console.log(error.response.data.fields);
+      Toast.error(error.response?.data.message);
     }
   }
 

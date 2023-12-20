@@ -26,7 +26,7 @@ export const PlayerCard = ({ gameStatus, style, fieldId, setPlayers, player, onP
       Toast.success(`${player.name} kicked!`);
       setPlayers((currentPlayer) => currentPlayer.filter((cp) => cp._id !== selectedPlayerId));
     } catch (error) {
-      Toast.error(error.message);
+      Toast.error(error.response?.data.message);
     }
   };
 
@@ -71,7 +71,7 @@ export const PlayerNormalCard = ({ player }) => {
       );
       Toast.success("Friend Request Sent!");
     } catch (error) {
-      Toast.error(`Friend Request Sent Already`);
+      Toast.error(error.response?.data.message);
     }
   };
 

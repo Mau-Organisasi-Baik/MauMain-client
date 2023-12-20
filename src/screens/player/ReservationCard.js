@@ -6,11 +6,11 @@ import ReservationItem from "../../components/PlayerReservationItem";
 import BookModal from "../../components/modal/BookModal";
 import { useFocusEffect } from "@react-navigation/native";
 import { LoginContext } from "../../context/AuthContext";
+import { Toast } from "toastify-react-native";
 const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
 
 export const ReservationCard = ({ navigation, route }) => {
   const { fieldId } = route.params;
-
 
   useFocusEffect(
     useCallback(() => {
@@ -18,7 +18,6 @@ export const ReservationCard = ({ navigation, route }) => {
       return () => {};
     }, [])
   );
-  
 
   const [reservations, setReservations] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
@@ -46,10 +45,10 @@ export const ReservationCard = ({ navigation, route }) => {
         },
       });
 
-      // console.log(data);
+      console.log(data);
       setReservations(data.reservations);
     } catch (error) {
-      console.log(error.message);
+      Toast.error(error.response?.data.message);
     }
   }
 
