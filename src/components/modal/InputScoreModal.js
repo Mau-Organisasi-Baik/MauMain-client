@@ -1,13 +1,17 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { View, Modal, Text, TouchableOpacity, TextInput } from 'react-native';
 import { Toast } from 'toastify-react-native';
 import { BASE_URL } from '../../helpers/BASE_URL';
+import axios from "axios";
+import { LoginContext } from '../../context/AuthContext';
 
 export const InputScoreModal = ({setModalVisible, modalVisible, reservationId}) => {
     const [inputValues, setInputValues] = useState({
-        scoreA: "",
-        scoreB: "",
+        scoreA: "0",
+        scoreB: "0",
     })
+    const {userInfo} = useContext(LoginContext)
+    const token = userInfo.access_token
     const inputHandler = (inputIdentifier, enteredValue) => {
         setInputValues((currValue) => {
             return {
@@ -18,13 +22,16 @@ export const InputScoreModal = ({setModalVisible, modalVisible, reservationId}) 
     };
     const handleScoreSubmit = async () => {
         try {
-            const url = `${BASE_URL}/reservations/${reservationId}`;
+            const url = `${BASE_URL}/admin/reservations/${reservationId}/score`;
             let score = {
                 score: `${inputValues.scoreA}|${inputValues.scoreB}`
             }
-            const {
-                data: { data },
-            } = await Axios.put(url, score);
+            console.log(score, url)
+            const { data } = await axios.put(url, score, {
+                headers : {
+                    'Authorization' :  `Bearer ${token}`
+                }
+            });
             setModalVisible(!modalVisible);
         }
         catch(error) {
@@ -45,14 +52,14 @@ export const InputScoreModal = ({setModalVisible, modalVisible, reservationId}) 
             <TextInput
                 style={{ backgroundColor: '#f0f0f0' }}
                 className="bg-grey-800 pl-2 py-3"
-                value="0"
+                defaultValue="0"
                 onChangeText={(text) => inputHandler("scoreA", text)}
             />
             <Text className="text-lg">TEAM B : </Text>
             <TextInput
                 style={{ backgroundColor: '#f0f0f0' }}
                 className="bg-grey-800 pl-2 py-3"
-                value="0"
+                defaultValue="0"
                 onChangeText={(text) => inputHandler("scoreB", text)}
             />
             <TouchableOpacity onPress={() => handleScoreSubmit()} className="bg-blue-500 w-3/12 py-1 rounded-lg my-2">
