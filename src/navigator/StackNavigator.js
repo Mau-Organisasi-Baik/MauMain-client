@@ -11,6 +11,8 @@ import { AdminDetailReservation } from "../screens/admin/AdminDetailReservation"
 import { LoginContext } from "../context/AuthContext";
 import { useContext } from "react";
 import { PinpointField } from "../screens/admin/PinpointField";
+import { PlayerCard } from "../components/card/PlayerCard";
+import { PlayerProfile } from "../screens/player/PlayerProfile";
 
 export const StackNavigator = () => {
   const Stack = createStackNavigator();
@@ -56,6 +58,10 @@ export const StackNavigator = () => {
                 return <Ionicons name={iconName} size={size} color={color} />;
               },
             }}
+          />
+          <Stack.Screen
+            name="PlayerProfile"
+            component={PlayerProfile}
           />
         </>
       ) : (

@@ -86,6 +86,7 @@ export const PlayerNormalCard = ({ player }) => {
     <TouchableOpacity
       onPress={() => {
         // todo other profile
+        navigation.navigate("PlayerProfile", { id: _id })
       }}
       className={`flex-row items-center bg-blue-800 p-2 rounded-lg my-1`}
     >
