@@ -6,6 +6,7 @@ import axios from "axios";
 const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
 
 import { LoginContext } from "../../context/AuthContext";
+import { Toast } from "toastify-react-native";
 
 export const AdminReservation = () => {
   const [reservations, setReservations] = useState([]);
@@ -15,13 +16,17 @@ export const AdminReservation = () => {
   const token = userInfo.access_token;
 
   const asyncFn = async () => {
-    const { data } = await axios.get(`${BASE_URL}/admin/reservations`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    setReservations(data.data.reservations);
+    try {
+      const { data } = await axios.get(`${BASE_URL}/admin/reservations`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+  
+      setReservations(data.data.reservations);
+    } catch (error) {
+      Toast.error(error.response.data.message)
+    }
   };
 
   useEffect(() => {

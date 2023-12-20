@@ -9,6 +9,7 @@ import { BASE_URL } from "../../helpers/BASE_URL";
 import { useFocusEffect } from "@react-navigation/native";
 
 import { LoginContext } from "../../context/AuthContext";
+import { Toast } from "toastify-react-native";
 
 export const AdminDetailReservation = ({route, navigation}) => {
   const {id} = route.params
@@ -17,6 +18,14 @@ export const AdminDetailReservation = ({route, navigation}) => {
   const {userInfo} = useContext(LoginContext)
   const token = userInfo.access_token
   const gameStatus = detailField.status
+  const gameType = detailField.type
+
+  const [indicator, setIndicator] = useState(false);
+
+  function changeIndicator() {
+    setIndicator(!indicator);
+  }
+
   const endGame = async() => {
     
     const {data} = await axios.put(`${BASE_URL}/admin/reservations/${id}/end`, {id}, {
@@ -36,10 +45,11 @@ export const AdminDetailReservation = ({route, navigation}) => {
             'Authorization' : `Bearer ${token}`
           }
       });
+      console.log(data.data)
       navigation.goBack();
     }
     catch(error) {
-      console.log(error);
+      Toast.error(error.response.data.message);
     }
   }
   
@@ -67,7 +77,7 @@ export const AdminDetailReservation = ({route, navigation}) => {
        onPress={() => cancelReservation()}
        />,
     });
-  }, []);
+  }, [indicator]);
 
   useFocusEffect(
     useCallback(() => {
@@ -93,15 +103,18 @@ export const AdminDetailReservation = ({route, navigation}) => {
           return <PlayerCard gameStatus={detailField.status} setPlayers={setPlayers} player={item} admin style={{borderColor, borderWidth:2}} fieldId={id} />} 
         }
       />
-      
-      <TouchableOpacity onPress={gameStatus === 'ended' ? inputScoreHandler :  endGame}  className={`bg-blue-700 p-4 rounded-full`}>
-        <Text className={`text-white text-center text-lg`}>{gameStatus === 'ended' ? 'Input Score' : 'Done'}</Text>
-      </TouchableOpacity>
+      {gameStatus === "upcoming" ?
+      (<TouchableOpacity onPress={gameType === 'competitive' ? inputScoreHandler : endGame}  className={`bg-blue-700 p-4 rounded-full`}>
+        <Text className={`text-white text-center text-lg`}>{gameType === 'competitive' ? 'Input Score' : 'Done'}</Text>
+      </TouchableOpacity>) : (
+        <></>
+      )
+      }
       {/* <TouchableOpacity onPress={() => setModalVisible(true)} className={`bg-blue-700 p-4 rounded-full`}>
         <Text className={`text-white text-center text-lg`}>Input Score</Text>
       </TouchableOpacity> */}
     </View>
-    {modalVisible && <InputScoreModal modalVisible={modalVisible} setModalVisible={setModalVisible} reservationId={id}/>}
+    {modalVisible && <InputScoreModal modalVisible={modalVisible} setModalVisible={setModalVisible} reservationId={id} changeIndicator={changeIndicator}/>}
         </>
     )
 }
