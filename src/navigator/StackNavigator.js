@@ -10,6 +10,7 @@ import { AdminScheduleForm } from "../screens/admin/AdminScheduleForm";
 import { AdminDetailReservation } from "../screens/admin/AdminDetailReservation";
 import { LoginContext } from "../context/AuthContext";
 import { useContext } from "react";
+import { PinpointField } from "../screens/admin/PinpointField";
 
 export const StackNavigator = () => {
   const Stack = createStackNavigator();
@@ -42,6 +43,18 @@ export const StackNavigator = () => {
             component={AdminDetailReservation}
             options={{
               headerTitle: "Detail Reservation",
+            }}
+          />
+          <Stack.Screen
+            name="pinpointField"
+            component={PinpointField}
+            options={{
+              headerTitle: "Pinpoint Field Location",
+              // headerShown: false,
+              tabBarIcon: ({ focused, color, size }) => {
+                let iconName = focused ? "pin" : "pin-outline";
+                return <Ionicons name={iconName} size={size} color={color} />;
+              },
             }}
           />
         </>

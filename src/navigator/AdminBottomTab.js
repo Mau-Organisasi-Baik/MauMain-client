@@ -15,7 +15,7 @@ const Tab = createBottomTabNavigator();
 export const AdminBottomTab = ({ navigation }) => {
   const { userInfo, isProfileValid } = useContext(LoginContext);
 
-  if (!isProfileValid) {
+  if (isProfileValid) {
     return (
       <Tab.Navigator>
         <Tab.Screen
@@ -64,18 +64,6 @@ export const AdminBottomTab = ({ navigation }) => {
           // headerShown: false,
           tabBarIcon: ({ focused, color, size }) => {
             let iconName = focused ? "golf" : "golf-outline";
-            return <Ionicons name={iconName} size={size} color={color} />;
-          },
-        }}
-      />
-      <Tab.Screen
-        name="pinpointField"
-        component={PinpointField}
-        options={{
-          headerTitle: "Pinpoint Field Location",
-          // headerShown: false,
-          tabBarIcon: ({ focused, color, size }) => {
-            let iconName = focused ? "pin" : "pin-outline";
             return <Ionicons name={iconName} size={size} color={color} />;
           },
         }}

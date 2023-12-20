@@ -48,6 +48,9 @@ export const Explore = () => {
   const [selectedTag, setSelectedTag] = useState(null);
 
   function changeTag(newTag) {
+    if (newTag.name === "All") {
+      return setSelectedTag(null);
+    }
     setSelectedTag(newTag);
   }
 

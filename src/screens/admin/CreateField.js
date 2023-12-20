@@ -11,7 +11,7 @@ const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
 const DEFAULT_IMAGE = "https://via.placeholder.com/600x400";
 
 export const CreateField = ({ navigation, route }) => {
-  const { userInfo } = useContext(LoginContext);
+  const { userInfo, checkProfileValid } = useContext(LoginContext);
   const [inputValues, setInputValues] = useState({
     name: "",
     address: "",
@@ -19,7 +19,6 @@ export const CreateField = ({ navigation, route }) => {
 
   const [selectedTags, setSelectedTags] = useState([]);
   const [selectedImage, setSelectedImage] = useState({
-    name: "",
     uri: DEFAULT_IMAGE,
   });
 
@@ -27,6 +26,8 @@ export const CreateField = ({ navigation, route }) => {
   if (route.params?.coordinates) {
     coordinates = route.params.coordinates;
   }
+
+  let coordinateText;
 
   if (coordinates.length === 2) {
     coordinateText = `${coordinates[0]}, ${coordinates[1]}`;
@@ -43,7 +44,7 @@ export const CreateField = ({ navigation, route }) => {
     });
   };
 
-  const pickMultipleImage = async () => {
+  const pickImage = async () => {
     try {
       const hasPermission = await requestPermission();
       if (!hasPermission) return;
@@ -56,10 +57,8 @@ export const CreateField = ({ navigation, route }) => {
       });
 
       if (result.uri) {
-        console.log(result);
-
-        const { uri } = result;
-        setSelectedImage({ uri });
+        const { uri, type } = result;
+        setSelectedImage({ uri, type });
       } else {
         setSelectedImage({ uri: DEFAULT_IMAGE });
       }
@@ -68,7 +67,7 @@ export const CreateField = ({ navigation, route }) => {
     }
   };
 
-  async function fieldSubmitHandler() {
+  async function createProfileHandler() {
     try {
       const { address, name } = inputValues;
       const tagIds = selectedTags.map((tag) => tag._id).join(", ");
@@ -79,8 +78,6 @@ export const CreateField = ({ navigation, route }) => {
         parsedCoordinates = coordinates.join(", ");
       }
 
-      console.log("abcdef");
-      const url = `${BASE_URL}/admin/profile`;
       const formData = new FormData();
 
       if (selectedImage.uri === DEFAULT_IMAGE) {
@@ -107,27 +104,28 @@ export const CreateField = ({ navigation, route }) => {
       formData.append("name", name);
       formData.append("tagIds", tagIds);
       formData.append("coordinates", parsedCoordinates);
-      formData.append("photos", [
-        {
-          type: photo.type,
-          uri: Platform.OS === "ios" ? photo.uri.replace("file://", "") : photo.uri,
-        },
-      ]);
 
-      await axios({
-        url,
-        method: "post",
-        headers: {
-          Authorization: "Bearer " + userInfo.access_token,
-        },
-        data: formData,
+      formData.append("photos", {
+        name: "fieldImage.png",
+        type: "image/" + /(?:\.([^.]+))?$/.exec(selectedImage.uri)[1],
+        uri: selectedImage.uri,
       });
 
-      Toast.success("OKEEEE");
+      const url = `${BASE_URL}/admin/profile`;
+      await axios.post(url, formData, {
+        headers: {
+          Authorization: "Bearer " + userInfo.access_token,
+          "Content-Type": "multipart/form-data",
+          Accept: "application/json",
+        },
+      });
+
+      checkProfileValid();
+      Toast.success("Profile created successfully");
     } catch (error) {
       console.log(error);
 
-      Toast.error(error.response.data.message);
+      Toast.error(error.response?.data.message);
     }
   }
 
@@ -136,8 +134,8 @@ export const CreateField = ({ navigation, route }) => {
       <ScrollView className={"bg-gray-100 flex"}>
         <View className={"p-4"}>
           <View horizontal className={"mb-4 w-full"} showsHorizontalScrollIndicator={false} contentContainerStyle={{ alignItems: "center" }}>
-            <TouchableOpacity onPress={pickMultipleImage} style={{ flex: 1 }}>
-              <Image className="h-40 w-full rounded-lg mr-2 flex flex-1" source={selectedImage} />
+            <TouchableOpacity onPress={pickImage} style={{ flex: 1 }}>
+              <Image className="h-40 w-full rounded-lg mr-2 flex flex-1" source={{ uri: selectedImage.uri }} />
             </TouchableOpacity>
           </View>
           <View>
@@ -169,13 +167,16 @@ export const CreateField = ({ navigation, route }) => {
               onChangeText={(text) => inputHandler("address", text)}
             />
 
-            <TouchableOpacity className={"bg-purple-500 w-full my-2 px-4 py-2 rounded-lg"} onPress={() => navigation.navigate("pinpointField")}>
+            <TouchableOpacity
+              className={"bg-purple-500 w-full my-2 px-4 py-2 rounded-lg"}
+              onPress={() => navigation.navigate("pinpointField", { prev: "createProfile" })}
+            >
               <Text className={"text-white text-center"}>Pin Location ({coordinateText})</Text>
             </TouchableOpacity>
           </View>
         </View>
 
-        <Pressable style={{ padding: 15, width: "100%", backgroundColor: "rgb(27, 117, 208)", alignItems: "center" }} onPress={fieldSubmitHandler}>
+        <Pressable style={{ padding: 15, width: "100%", backgroundColor: "rgb(27, 117, 208)", alignItems: "center" }} onPress={createProfileHandler}>
           <Text>Create Profile</Text>
         </Pressable>
       </ScrollView>
