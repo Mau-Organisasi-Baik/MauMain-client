@@ -1,7 +1,9 @@
-import { Modal, ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { PlayerNormalCard } from "../../components/card/PlayerCard";
-import { PlayerFieldInfo } from "../../components/FieldInfo";
-import BookModal from "../../components/modal/BookModal";
+
+import {  Modal, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import {  PlayerNormalCard } from "../../components/card/PlayerCard";
+import {  PlayerFieldInfo } from "../../components/FieldInfo";
+
+
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Ionicons } from "@expo/vector-icons";
