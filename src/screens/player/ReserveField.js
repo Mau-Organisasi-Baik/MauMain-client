@@ -213,7 +213,7 @@ export const ReserveField = ({ route, navigation }) => {
 
   if (!reservationDetail) return <></>;
 
-  const { status } = reservationDetail;
+  const { status, fieldId } = reservationDetail;
 
   if (status === "ended") return <EndedReservation reservation={reservationDetail} field={fieldDetail} />;
   if (status === "upcoming")

@@ -5,7 +5,7 @@ import { FieldInfo } from "../../components/FieldInfo";
 import { InputScoreModal } from "../../components/modal/InputScoreModal";
 import axios from "axios";
 import { BASE_URL } from "../../helpers/BASE_URL";
-import { access_token } from "../../helpers/AccessToken";
+
 import { LoginContext } from "../../context/AuthContext";
 
 export const AdminDetailReservation = ({route}) => {
@@ -38,9 +38,11 @@ export const AdminDetailReservation = ({route}) => {
             'Authorization' : `Bearer ${token}`
         }
         })
+        console.log(data);
         setDetailField(data.data.reservation)
         setPlayers(data.data.reservation.players)
       } catch (error) {
+        console.log(error.response.data, 'tes error');
         throw error
       }
     }

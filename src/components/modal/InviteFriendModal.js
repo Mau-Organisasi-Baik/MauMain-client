@@ -73,10 +73,14 @@ export const InviteFriendModal = ({fieldId, setModalVisible, modalVisible}) => {
         setFriends(data);
       }
     const postInvite = async() => {
+        const form = {
+            inviteeId,
+            fieldId
+        }
         const url = `${BASE_URL}/invite`;
         const {
           data: { data },
-        } = await axios.post(url, {inviteeId}, {
+        } = await axios.post(url, form, {
           headers: {
             Authorization: "Bearer " + token,
           },
