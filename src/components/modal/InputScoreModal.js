@@ -5,7 +5,7 @@ import { BASE_URL } from '../../helpers/BASE_URL';
 import axios from "axios";
 import { LoginContext } from '../../context/AuthContext';
 
-export const InputScoreModal = ({setModalVisible, modalVisible, reservationId}) => {
+export const InputScoreModal = ({setModalVisible, modalVisible, reservationId, changeIndicator}) => {
     const [inputValues, setInputValues] = useState({
         scoreA: "0",
         scoreB: "0",
@@ -26,13 +26,14 @@ export const InputScoreModal = ({setModalVisible, modalVisible, reservationId}) 
             let score = {
                 score: `${inputValues.scoreA}|${inputValues.scoreB}`
             }
-            console.log(score, url)
+            
             const { data } = await axios.put(url, score, {
                 headers : {
                     'Authorization' :  `Bearer ${token}`
                 }
             });
             setModalVisible(!modalVisible);
+            changeIndicator()
         }
         catch(error) {
             Toast.error(error.response.data.message);
