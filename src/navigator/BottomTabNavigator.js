@@ -21,6 +21,10 @@ export const MyTabs = () => {
           component={Explore}
           options={{
             headerShown: false,
+            tabBarIcon: ({ focused, color, size }) => {
+              let iconName = focused ? "search" : "search-outline";
+              return <Ionicons name={iconName} size={size} color={color} />;
+            },
           }}
         />
 
