@@ -21,6 +21,8 @@ export const AdminReservation = () => {
       },
     });
 
+    console.log(data, token);
+
     setReservations(data.data.reservations);
   };
 
