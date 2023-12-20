@@ -30,7 +30,6 @@ export const PlayerCard = ({ gameStatus, style, fieldId, setPlayers, player, onP
     }
   };
 
-
   const navigation = useNavigation();
 
   return (
@@ -59,7 +58,7 @@ export const PlayerCard = ({ gameStatus, style, fieldId, setPlayers, player, onP
 export const PlayerNormalCard = ({ player }) => {
   const { userInfo } = useContext(LoginContext);
   const token = userInfo.access_token;
-  const addFriend = async(targetPlayerId) => {
+  const addFriend = async (targetPlayerId) => {
     try {
       await axios.post(
         `${BASE_URL}/friends`,
@@ -70,11 +69,11 @@ export const PlayerNormalCard = ({ player }) => {
           },
         }
       );
-      Toast.success('Friend Request Sent!')
+      Toast.success("Friend Request Sent!");
     } catch (error) {
-      Toast.error(`Friend Request Sent Already`)
+      Toast.error(`Friend Request Sent Already`);
     }
-  }
+  };
 
   const { name, exp, _id, profilePictureUrl } = player;
 
@@ -90,7 +89,7 @@ export const PlayerNormalCard = ({ player }) => {
       }}
       className={`flex-row items-center bg-blue-800 p-2 rounded-lg my-1`}
     >
-      <Image source={{uri:profilePictureUrl}} className={`h-12 w-12 rounded-full mr-2`} />
+      <Image source={{ uri: profilePictureUrl }} className={`h-12 w-12 rounded-full mr-2`} />
       <View className={"flex"}>
         <Text className={`flex-1 text-white text-lg`}>{name}</Text>
         <Text className={`flex-1 text-white text-sm`}>Level: {Math.floor(exp / 1000)}</Text>
@@ -101,7 +100,7 @@ export const PlayerNormalCard = ({ player }) => {
           <Text
             onPress={() => {
               // todo: add friend
-              addFriend(player._id)
+              addFriend(player._id);
             }}
             className={`text-white mx-1 bg-slate-300 p-2 rounded-md`}
           >
@@ -109,7 +108,9 @@ export const PlayerNormalCard = ({ player }) => {
           </Text>
           <Text
             // todo: chat
-            onPress={() => {navigation.navigate('Chat', {playerId : player._id})}}
+            onPress={() => {
+              navigation.navigate("Chat", { playerId: player._id });
+            }}
             className={`text-white mx-1 bg-slate-300 p-2 rounded-md`}
           >
             Chat

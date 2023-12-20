@@ -1,12 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 import { View, Text, Image, ScrollView, TouchableOpacity, TextInput, Pressable } from "react-native";
 
-import { AddTagsModal } from "../../components/modal/AddTagsModal";
 import { LoginContext } from "../../context/AuthContext";
 import axios from "axios";
 import { Toast } from "toastify-react-native";
 const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
-import { useFocusEffect } from "@react-navigation/native";
 
 export const AdminField = ({ route, navigation }) => {
   const { userInfo, checkProfileValid, LogoutAction } = useContext(LoginContext);
@@ -186,13 +184,13 @@ export const AdminField = ({ route, navigation }) => {
             </View>
 
             <Text className={"text-xl font-bold my-2"}>Sport tags</Text>
-            <AddTagsModal disabled={true} selectedTags={selectedTags} setSelectedTags={setSelectedTags} />
+            {/* <AddTagsModal disabled={true} selectedTags={selectedTags} setSelectedTags={setSelectedTags} /> */}
           </View>
           {/* Address */}
           <View className={"my-12"}>
             <Text className={"text-lg font-semibold"}>Address</Text>
             <TextInput
-            editable={false}
+              editable={false}
               value={inputValues.address}
               style={{
                 borderBottomColor: "grey",

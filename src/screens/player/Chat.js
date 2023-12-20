@@ -3,6 +3,7 @@ import * as TalkRn from "@talkjs/expo";
 import axios from "axios";
 import { BASE_URL } from "../../helpers/BASE_URL";
 import { LoginContext } from "../../context/AuthContext";
+import { Toast } from "toastify-react-native";
 
 export default function ChatComponent({ route }) {
   const { playerId: otherPlayerId } = route.params;
@@ -13,41 +14,53 @@ export default function ChatComponent({ route }) {
   const { userInfo } = useContext(LoginContext);
   const token = userInfo.access_token;
 
-  const asyncFn = async () => {
-    const { data } = await axios.get(`${BASE_URL}/profile`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+  const [chatReady, setChatReady] = useState(false);
+  const [realChatReady, setRealChatReady] = useState(false);
 
-    const response = await axios.get(`${BASE_URL}/profile/${otherPlayerId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    setOtherUser(response.data.data.user);
+  const asyncFn = async () => {
+    try {
+      let {
+        data: { data },
+      } = await axios.get(`${BASE_URL}/profile`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (data) {
+        setProfileData(data.user);
+      }
+
+      let {
+        data: { data: data2 },
+      } = await axios.get(`${BASE_URL}/profile/${otherPlayerId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (data2) setOtherUser(data2.user);
+      setChatReady(true);
+    } catch (error) {
+      Toast.error(error.response.data.message);
+    }
   };
 
   useEffect(() => {
     asyncFn();
   }, []);
 
-  console.log(userInfo.playerId, "player");
-  console.log(otherPlayerId, "other");
-
   const me = {
     id: userInfo.playerId,
     name: userInfo.username,
     photoUrl: profileData.profilePictureUrl,
-    welcomeMessage: "Hey there! How are you? :-)",
     role: "default",
   };
 
   const other = {
     id: otherPlayerId,
-    name: otherUser.name,
+    name: otherUser.name || "other",
     photoUrl: otherUser.profilePictureUrl,
-    welcomeMessage: "Hey, how can I help? https://google.com",
     role: "default",
   };
 
@@ -56,11 +69,19 @@ export default function ChatComponent({ route }) {
   conversationBuilder.setParticipant(me);
   conversationBuilder.setParticipant(other);
 
+  setTimeout(() => {
+    setRealChatReady(true);
+  }, 500);
+
+  console.log(chatReady, realChatReady);
+
   return (
     <>
-      <TalkRn.Session appId="tf8sGGUu" me={me}>
-        <TalkRn.Chatbox conversationBuilder={conversationBuilder} />
-      </TalkRn.Session>
+      {chatReady && realChatReady && (
+        <TalkRn.Session appId="tf8sGGUu" me={me}>
+          <TalkRn.Chatbox conversationBuilder={conversationBuilder} />
+        </TalkRn.Session>
+      )}
     </>
   );
 }
