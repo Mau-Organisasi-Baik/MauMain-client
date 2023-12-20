@@ -77,7 +77,8 @@ export const PlayerNormalCard = ({ player }) => {
     }
   }
 
-  const { name, exp, _id } = player;
+  const { name, exp, _id, profilePictureUrl } = player;
+
   const navigation = useNavigation();
 
   const isHimself = _id === userInfo.playerId;
@@ -89,7 +90,7 @@ export const PlayerNormalCard = ({ player }) => {
       }}
       className={`flex-row items-center bg-blue-800 p-2 rounded-lg my-1`}
     >
-      <Image source={require("../../assets/Sergeant1.webp")} className={`h-12 w-12 rounded-full mr-2`} />
+      <Image source={{uri:profilePictureUrl}} className={`h-12 w-12 rounded-full mr-2`} />
       <View className={"flex"}>
         <Text className={`flex-1 text-white text-lg`}>{name}</Text>
         <Text className={`flex-1 text-white text-sm`}>Level: {Math.floor(exp / 1000)}</Text>

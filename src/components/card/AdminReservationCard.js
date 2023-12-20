@@ -4,7 +4,7 @@ import { getScheduleTime } from '../../helpers/ScheduleTime';
 
 export const AdminReservationCard = ({reservation}) => {
     const navigation = useNavigation()
-    console.log(reservation._id);
+    console.log(reservation, 'ini reservation');
     return (
         <>
     <View className="mx-4 my-2 p-4 bg-white rounded-lg shadow">
@@ -14,7 +14,7 @@ export const AdminReservationCard = ({reservation}) => {
         </View>
         <View className="flex-row justify-between items-center">
             <Text className="text-gray-600">{reservation.date}, {getScheduleTime(reservation.schedule.TimeStart)} - {getScheduleTime(reservation.schedule.TimeEnd)}</Text>
-            <TouchableOpacity onPress={() => navigation.navigate('AdminDetailReservation', {id : reservation._id})} className="bg-blue-500 py-2 px-4 rounded-full">
+            <TouchableOpacity onPress={() => navigation.navigate('AdminDetailReservation', {id : reservation.schedule._id})} className="bg-blue-500 py-2 px-4 rounded-full">
             <Text className="text-white font-bold">Details</Text>
             </TouchableOpacity>
         </View>
