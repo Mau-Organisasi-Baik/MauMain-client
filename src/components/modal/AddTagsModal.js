@@ -4,12 +4,14 @@ import { Picker } from "@react-native-picker/picker";
 import axios from "axios";
 const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
 
-export const AddTagsModal = ({ selectedTags, setSelectedTags }) => {
+export const AddTagsModal = ({ selectedTags, setSelectedTags, disabled }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [tags, setTags] = useState([]);
   const [currentSelectedTag, setCurrentSelectedTag] = useState(null);
 
   function addTagHandler(tag) {
+    if (disabled) return
+
     setSelectedTags((old) => {
       return [...old, tag];
     });
@@ -28,7 +30,7 @@ export const AddTagsModal = ({ selectedTags, setSelectedTags }) => {
     let isSelected = false;
 
     for (const selectedTag of selectedTags) {
-      if (selectedTag._id === tag._id) {
+      if (selectedTag.name === tag.name) {
         isSelected = true;
       }
     }
@@ -45,8 +47,9 @@ export const AddTagsModal = ({ selectedTags, setSelectedTags }) => {
     setCurrentSelectedTag(targetTag);
   }
 
-  function removeSelectedTag(tagId) {
-    setSelectedTags(selectedTags.filter((tag) => tag._id !== tagId));
+  function removeSelectedTag(name) {
+    if (disabled) return
+    setSelectedTags(selectedTags.filter((tag) => tag.name !== name));
   }
 
   return (
@@ -56,13 +59,13 @@ export const AddTagsModal = ({ selectedTags, setSelectedTags }) => {
 
         {selectedTags.map((tag) => {
           return (
-            <TouchableOpacity key={tag._id} onPress={() => removeSelectedTag(tag._id)} className={"bg-gray-400 rounded-full p-2 px-5 m-1"}>
+            <TouchableOpacity key={tag._id} onPress={() => removeSelectedTag(tag.name)} className={"bg-gray-400 rounded-full p-2 px-5 m-1"}>
               <Text className={"text-white"}>{tag.name}</Text>
             </TouchableOpacity>
           );
         })}
 
-        {availableTags.length > 0 && (
+        {availableTags.length > 0 && !disabled &&(
           <TouchableOpacity onPress={() => setModalVisible(true)} className={"bg-gray-400 rounded-full p-2 px-5 m-1"}>
             <Text className={"text-white"}>+</Text>
           </TouchableOpacity>
@@ -80,7 +83,7 @@ export const AddTagsModal = ({ selectedTags, setSelectedTags }) => {
               selectedValue={currentSelectedTag}
             >
               {availableTags.map((tag) => {
-                return <Picker.Item key={tag._id} label={tag.name} value={tag._id} />;
+                return <Picker.Item key={tag.name} label={tag.name} value={tag._id} />;
               })}
             </Picker>
             <TouchableOpacity

@@ -15,7 +15,7 @@ const CategoryFilter = ({ selectedTag, changeTag }) => {
         data: { data },
       } = await axios.get(`${BASE_URL}/tags`);
 
-      setTags(data.tags);
+      setTags([{ name: "All" }, ...data.tags]);
     } catch (error) {
       Toast.error(error.message);
     }

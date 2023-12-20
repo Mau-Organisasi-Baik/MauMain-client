@@ -12,9 +12,13 @@ export const Profile = ({ navigation }) => {
 
   const { LogoutAction, userInfo } = useContext(LoginContext);
 
-  console.log(userInfo.role, "<<<");
   const [name, setName] = useState(null);
-  const [profileData, setProfileData] = useState([]);
+  const [profileData, setProfileData] = useState({
+    profilePictureUrl: "",
+    name: "placeholder",
+    history: [],
+  });
+
   useEffect(() => {
     const asyncFn = async () => {
       const token = userInfo.access_token;
@@ -37,7 +41,7 @@ export const Profile = ({ navigation }) => {
   return (
     <>
       <LinearGradient colors={["#003366", "#66CCFF"]} style={{ flex: 1, justifyContent: "center", padding: 16 }}>
-        <TouchableOpacity onPress={pickImage}>
+        <TouchableOpacity onPress={() => {}}>
           <Image className={`rounded-full mx-auto bg-white w-28 h-28`} source={{ uri: profileData.profilePictureUrl }} />
         </TouchableOpacity>
         <TextInput
@@ -48,9 +52,9 @@ export const Profile = ({ navigation }) => {
           className="text-white text-center text-2xl mt-4"
         />
         <XPBar currentXP={profileData.exp} />
-        <HistoryScroll />
-        <Button onPress={logoutHandler} title="Logout" />
+        <HistoryScroll histories={profileData.history} />
       </LinearGradient>
+      <Button onPress={logoutHandler} title="Logout" />
     </>
   );
 };

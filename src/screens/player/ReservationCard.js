@@ -9,8 +9,8 @@ import { LoginContext } from "../../context/AuthContext";
 const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
 
 export const ReservationCard = ({ navigation, route }) => {
-  
   const { fieldId } = route.params;
+
 
   useFocusEffect(
     useCallback(() => {
@@ -19,6 +19,7 @@ export const ReservationCard = ({ navigation, route }) => {
     }, [])
   );
   
+
   const [reservations, setReservations] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [indicator, setIndicator] = useState(false);
@@ -32,8 +33,6 @@ export const ReservationCard = ({ navigation, route }) => {
   function toggleIndicator() {
     setIndicator(!indicator);
   }
-
- 
 
   async function fetchReservations() {
     try {
