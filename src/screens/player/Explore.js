@@ -60,9 +60,9 @@ export const Explore = () => {
         coords: { longitude, latitude },
       } = location;
 
-      latitude= -6.2607187
-      longitude= 106.7816162
-      
+      latitude = -6.2607187;
+      longitude = 106.7816162;
+
       const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
 
       let url = `${BASE_URL}/fields/explore?longitude=${longitude}&latitude=${latitude}`;
@@ -91,17 +91,15 @@ export const Explore = () => {
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
-      console.log(status);
 
       if (status !== "granted") {
         setErrorMsg("Permission to access location was denied");
         return;
+      } else {
+        let newLocation = await Location.getCurrentPositionAsync({});
+        console.log(newLocation, "new LOCATION");
+        setLocation(newLocation);
       }
-
-      let newLocation = await Location.getCurrentPositionAsync({});
-      console.log(newLocation);
-
-      setLocation(newLocation);
     })();
   }, []);
 
@@ -111,7 +109,12 @@ export const Explore = () => {
     }
   }, [location, selectedTag]);
 
-  if (!location) return <></>;
+  if (!location) {
+    latitude = -6.2607187;
+    longitude = 106.7816162;
+
+    setLocation({ coords: { longitude, latitude } });
+  }
 
   return (
     <>

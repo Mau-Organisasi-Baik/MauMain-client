@@ -4,7 +4,6 @@ import { XPBar } from "../../components/XPBar";
 import { HistoryScroll } from "../../components/HistoryScroll";
 import { LoginContext } from "../../context/AuthContext";
 import { useContext, useState, useEffect } from "react";
-import { pickImage } from "../../helpers/UploadImage";
 import axios from "axios";
 
 export const Profile = ({ navigation }) => {
@@ -45,6 +44,7 @@ export const Profile = ({ navigation }) => {
           <Image className={`rounded-full mx-auto bg-white w-28 h-28`} source={{ uri: profileData.profilePictureUrl }} />
         </TouchableOpacity>
         <TextInput
+          editable={false}
           placeholder={profileData.name}
           onChangeText={(e) => setName(e)}
           value={name}

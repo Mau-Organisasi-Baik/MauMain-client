@@ -37,6 +37,10 @@ export const LoginProvider = ({ children }) => {
     try {
       await SecureStore.deleteItemAsync("loginInfo");
       await SecureStore.deleteItemAsync("profileValid");
+
+      const valid = await SecureStore.getItemAsync("profileValid");
+
+      console.log(valid);
       setIsLoggedIn(false);
     } catch (error) {
       throw error;
@@ -44,14 +48,20 @@ export const LoginProvider = ({ children }) => {
   }
 
   async function checkProfileValid(access_token, role) {
+    console.log("abc");
     if (!access_token) {
+      if (!userInfo) return;
       access_token = userInfo.access_token;
       role = userInfo.role;
     }
 
     try {
       const valid = await SecureStore.getItemAsync("profileValid");
+
+      console.log(valid, "<<<<");
+
       if (valid) {
+        console.log("auto");
         setIsProfileValid(true);
       } else {
         try {
@@ -71,7 +81,11 @@ export const LoginProvider = ({ children }) => {
             },
           });
 
-          if (!data.user.name || !data.user.profilePictureUrl) {
+          if (role === "player" && !data.user.name) {
+            return setIsProfileValid(false);
+          }
+
+          if (role === "field" && !data.field.name) {
             return setIsProfileValid(false);
           }
 
@@ -86,6 +100,8 @@ export const LoginProvider = ({ children }) => {
 
   useEffect(() => {
     getValueFor("loginInfo").then((data) => {
+      if (data === "null") return;
+
       if (data) {
         data = JSON.parse(JSON.parse(data));
 

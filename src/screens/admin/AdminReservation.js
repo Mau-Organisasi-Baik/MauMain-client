@@ -1,5 +1,6 @@
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { AdminReservationCard } from "../../components/card/AdminReservationCard";
+import { useFocusEffect } from "@react-navigation/native";
 import { FlatList } from "react-native";
 import axios from "axios";
 const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
@@ -13,19 +14,27 @@ export const AdminReservation = () => {
 
   const token = userInfo.access_token;
 
-  useEffect(() => {
-    const asyncFn = async () => {
-      const { data } = await axios.get(`${BASE_URL}/admin/reservations`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      console.log(data);
+  const asyncFn = async () => {
+    const { data } = await axios.get(`${BASE_URL}/admin/reservations`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log(data);
 
-      setReservations(data.data.reservations);
-    };
+    setReservations(data.data.reservations);
+  };
+
+  useEffect(() => {
     asyncFn();
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      asyncFn();
+      return () => {};
+    }, [])
+  );
   return (
     <>
       <FlatList data={reservations} keyExtractor={(item) => item.id} renderItem={({ item }) => <AdminReservationCard reservation={item} />} />
