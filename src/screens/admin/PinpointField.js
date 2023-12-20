@@ -27,8 +27,6 @@ export const PinpointField = ({ route, navigation }) => {
     latitude = coordinates[1];
   }
 
-  console.log(latitude, longitude);
-
   return (
     <>
       <View style={{ flex: 1 }}>

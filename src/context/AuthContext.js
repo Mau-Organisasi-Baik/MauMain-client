@@ -16,9 +16,15 @@ export const LoginProvider = ({ children }) => {
   const [userInfo, setUserInfo] = useState(null);
   const [isProfileValid, setIsProfileValid] = useState(false);
 
-  async function LoginAction() {
+  async function LoginAction(value) {
     try {
       setIsLoggedIn(true);
+      if (value === "register") {
+        await SecureStore.deleteItemAsync("profileValid");
+        setIsProfileValid(false);
+      } else {
+        await checkProfileValid();
+      }
     } catch (error) {
       throw error;
     }
@@ -26,7 +32,6 @@ export const LoginProvider = ({ children }) => {
   async function loginInfo(value) {
     try {
       await SecureStore.setItemAsync("loginInfo", JSON.stringify(value));
-      await checkProfileValid();
       setUserInfo(value);
     } catch (error) {
       throw error;
@@ -40,7 +45,6 @@ export const LoginProvider = ({ children }) => {
 
       const valid = await SecureStore.getItemAsync("profileValid");
 
-      console.log(valid);
       setIsLoggedIn(false);
     } catch (error) {
       throw error;
@@ -48,7 +52,6 @@ export const LoginProvider = ({ children }) => {
   }
 
   async function checkProfileValid(access_token, role) {
-    console.log("abc");
     if (!access_token) {
       if (!userInfo) return;
       access_token = userInfo.access_token;
@@ -58,10 +61,7 @@ export const LoginProvider = ({ children }) => {
     try {
       const valid = await SecureStore.getItemAsync("profileValid");
 
-      console.log(valid, "<<<<");
-
       if (valid) {
-        console.log("auto");
         setIsProfileValid(true);
       } else {
         try {

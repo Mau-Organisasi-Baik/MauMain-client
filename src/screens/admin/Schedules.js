@@ -18,8 +18,16 @@ export const Schedules = ({ navigation }) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log(data.data);
-    setSchedules(data.data.schedules);
+    const timeString2Date = (string) => {
+      let regExTime = /([0-9]?[0-9]):([0-9][0-9])/;
+      let regExTimeArr = regExTime.exec(string);
+
+      return regExTimeArr[1] * 3600 * 1000 + regExTimeArr[2] * 60 * 1000;
+    };
+    const sortedData = data.data.schedules.sort((a, b) => {
+      return timeString2Date(a.TimeStart) - timeString2Date(b.TimeStart);
+    });
+    setSchedules(sortedData);
   };
 
   useEffect(() => {

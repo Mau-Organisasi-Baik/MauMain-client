@@ -1,20 +1,21 @@
 import { FlatList, ScrollView, Text, TouchableOpacity, View } from "react-native"
 import { PlayerCard } from "../../components/card/PlayerCard"
-import {useContext, useEffect, useState} from 'react'
+import { useCallback,useContext, useEffect, useState } from 'react'
 import { FieldInfo } from "../../components/FieldInfo";
 import { InputScoreModal } from "../../components/modal/InputScoreModal";
+import { Ionicons } from "@expo/vector-icons";
 import axios from "axios";
 import { BASE_URL } from "../../helpers/BASE_URL";
+import { useFocusEffect } from "@react-navigation/native";
 
 import { LoginContext } from "../../context/AuthContext";
 
-export const AdminDetailReservation = ({route}) => {
+export const AdminDetailReservation = ({route, navigation}) => {
   const {id} = route.params
   const [detailField, setDetailField] = useState({})
   const [players, setPlayers] = useState([])
   const {userInfo} = useContext(LoginContext)
   const token = userInfo.access_token
-  console.log(id, 'tes');
   const gameStatus = detailField.status
   const endGame = async() => {
     
@@ -26,28 +27,55 @@ export const AdminDetailReservation = ({route}) => {
   setDetailField(previousValue => ({
     ...previousValue,
     status: data.data.status 
-  }))
+  }));
+  }
+  const cancelReservation = async () => {
+    try {
+      const { data } = await axios.delete(`${BASE_URL}/admin/reservations/${id}`, {
+          headers: {
+            'Authorization' : `Bearer ${token}`
+          }
+      });
+      navigation.goBack();
+    }
+    catch(error) {
+      console.log(error);
+    }
   }
   
-  useEffect(() => {
-    const asyncFn = async() => {
-      try {
-        
-        const {data} = await axios.get(`${BASE_URL}/admin/reservations/${id}`, {
-          headers : {
-            'Authorization' : `Bearer ${token}`
-        }
-        })
-        console.log(data);
-        setDetailField(data.data.reservation)
-        setPlayers(data.data.reservation.players)
-      } catch (error) {
-        console.log(error.response.data, 'tes error');
-        throw error
+  const asyncFn = async() => {
+    try {
+      
+      const {data} = await axios.get(`${BASE_URL}/admin/reservations/${id}`, {
+        headers : {
+          'Authorization' : `Bearer ${token}`
       }
+      })
+      setDetailField(data.data.reservation)
+      setPlayers(data.data.reservation.players)
+    } catch (error) {
+      console.log(error.response.data, 'tes error');
+      throw error
     }
-    asyncFn()
-  }, [])
+  }
+  useEffect(() => {
+    asyncFn();
+    navigation.setOptions({
+      headerRight: () => <Ionicons
+       name={"trash-outline"}
+       size={24}
+       onPress={() => cancelReservation()}
+       />,
+    });
+  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      asyncFn();
+      return () => {};
+    }, [])
+  );
+
   const [modalVisible, setModalVisible] = useState(false);
   const inputScoreHandler = () => {
     setModalVisible(true)

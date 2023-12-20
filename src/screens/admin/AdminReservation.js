@@ -20,7 +20,8 @@ export const AdminReservation = () => {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log(data);
+
+    console.log(data, token);
 
     setReservations(data.data.reservations);
   };

@@ -35,7 +35,6 @@ export function LoginForm({ navigation }) {
       await LoginAction();
       await loginInfo(data);
     } catch (error) {
-   
       if (error.response) {
         Toast.error(error.response.data.message);
       } else if (error.request) {
@@ -75,7 +74,6 @@ export function LoginForm({ navigation }) {
         className="mt-8"
         onPress={() => {
           navigation.navigate("Register");
-          console.log("anc");
         }}
       >
         <Text className="text-white text-center">Don't have an account?</Text>
@@ -86,8 +84,7 @@ export function LoginForm({ navigation }) {
 }
 
 export function RegisterForm({ navigation }) {
-  const { LoginAction, loginInfo,checkProfileValid } = useContext(LoginContext);
-
+  const { LoginAction, loginInfo, checkProfileValid } = useContext(LoginContext);
 
   const [inputValues, setInputValues] = useState({
     name: "",
@@ -114,7 +111,7 @@ export function RegisterForm({ navigation }) {
         data: { data },
       } = await axios.post(url, inputValues);
 
-      await LoginAction();
+      await LoginAction("register");
       await loginInfo(data);
 
       await checkProfileValid();

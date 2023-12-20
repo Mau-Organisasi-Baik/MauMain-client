@@ -34,6 +34,7 @@ export const Profile = ({ navigation }) => {
     };
     asyncFn();
   }, []);
+
   const logoutHandler = async () => {
     await LogoutAction("access_token");
   };
@@ -51,6 +52,7 @@ export const Profile = ({ navigation }) => {
           placeholderTextColor="rgba(255, 255, 255, 0.7)"
           className="text-white text-center text-2xl mt-4"
         />
+
         <XPBar currentXP={profileData.exp} />
         <HistoryScroll histories={profileData.history} />
       </LinearGradient>

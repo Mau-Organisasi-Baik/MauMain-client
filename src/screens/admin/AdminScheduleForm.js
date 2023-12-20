@@ -52,7 +52,6 @@ export const AdminScheduleForm = () => {
     }
     
   };
-console.log(date);
   return (
     <View className={`p-4`}>
     
