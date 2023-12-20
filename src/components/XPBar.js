@@ -7,7 +7,6 @@ export const XPBar = ({ currentXP }) => {
   currentXP -= level * 1000;
   const xpPercentage = (currentXP / 1000) * 100;
 
-  console.log(xpPercentage);
   return (
     <>
       <View className={`w-5/6 mx-auto px-4 py-2`}>

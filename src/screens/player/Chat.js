@@ -31,7 +31,6 @@ export default function ChatComponent() {
     }
     asyncFn()
   }, [])
-  console.log(otherUser);
   const me = {
     id: userInfo.playerId,
     name: userInfo.username,

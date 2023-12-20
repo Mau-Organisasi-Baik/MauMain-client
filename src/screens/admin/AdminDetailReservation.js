@@ -14,7 +14,6 @@ export const AdminDetailReservation = ({route}) => {
   const [players, setPlayers] = useState([])
   const {userInfo} = useContext(LoginContext)
   const token = userInfo.access_token
-  console.log(id, 'tes');
   const gameStatus = detailField.status
   const endGame = async() => {
     
@@ -38,7 +37,6 @@ export const AdminDetailReservation = ({route}) => {
             'Authorization' : `Bearer ${token}`
         }
         })
-        console.log(data);
         setDetailField(data.data.reservation)
         setPlayers(data.data.reservation.players)
       } catch (error) {

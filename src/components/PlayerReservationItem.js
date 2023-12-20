@@ -3,8 +3,6 @@ import { Text, TouchableOpacity, View } from "react-native";
 import { getScheduleTime } from "../helpers/ScheduleTime";
 
 function EmptyReservationItem({ reservation, navigateBook }) {
-  console.log(reservation);
-
   const {
     schedule: { TimeStart, TimeEnd, _id: scheduleId },
     fieldId,

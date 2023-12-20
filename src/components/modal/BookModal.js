@@ -51,12 +51,6 @@ export const BookModal = ({ modalVisible, setModalVisible, bookInformation, togg
   const timeEnd = getScheduleTime(TimeEnd);
 
   async function createReservation() {
-    console.log({
-      fieldId,
-      scheduleId,
-      tagId: selectedSportId,
-      type: selectedMode,
-    });
     try {
       const url = `${BASE_URL}/reservations`;
       await axios.post(
@@ -73,9 +67,8 @@ export const BookModal = ({ modalVisible, setModalVisible, bookInformation, togg
           },
         }
       );
-  
+
       toggleIndicator();
-      
     } catch (error) {
       console.log(error.response.data.fields);
     }

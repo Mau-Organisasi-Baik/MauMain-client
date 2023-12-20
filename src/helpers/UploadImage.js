@@ -72,7 +72,6 @@ const uploadImage = async (uri) => {
     });
 
     const result = await response.data;
-    console.log(result, "outpt");
   } catch (error) {
     console.log(error, "eee");
     Toast.error(`An error occurred during the upload.`);
@@ -98,7 +97,6 @@ const uploadMultipleImages = async (imageUris) => {
         "Content-Type": "multipart/form-data",
       },
     });
-    console.log(response.data);
   } catch (error) {
     console.error(error);
   }
