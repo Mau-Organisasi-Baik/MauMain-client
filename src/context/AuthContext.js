@@ -16,9 +16,15 @@ export const LoginProvider = ({ children }) => {
   const [userInfo, setUserInfo] = useState(null);
   const [isProfileValid, setIsProfileValid] = useState(false);
 
-  async function LoginAction() {
+  async function LoginAction(value) {
     try {
       setIsLoggedIn(true);
+      if (value === "register") {
+        await SecureStore.deleteItemAsync("profileValid");
+        setIsProfileValid(false);
+      } else {
+        await checkProfileValid();
+      }
     } catch (error) {
       throw error;
     }
@@ -26,12 +32,6 @@ export const LoginProvider = ({ children }) => {
   async function loginInfo(value) {
     try {
       await SecureStore.setItemAsync("loginInfo", JSON.stringify(value));
-      if (value === "register") {
-        await SecureStore.deleteItemAsync("profileValid");
-        setIsProfileValid(false);
-      } else {
-        await checkProfileValid();
-      }
       setUserInfo(value);
     } catch (error) {
       throw error;

@@ -32,10 +32,9 @@ export function LoginForm({ navigation }) {
         data: { data },
       } = await axios.post(url, inputValues);
 
-      await LoginAction('register');
+      await LoginAction();
       await loginInfo(data);
     } catch (error) {
-   
       if (error.response) {
         Toast.error(error.response.data.message);
       } else if (error.request) {
@@ -85,8 +84,7 @@ export function LoginForm({ navigation }) {
 }
 
 export function RegisterForm({ navigation }) {
-  const { LoginAction, loginInfo,checkProfileValid } = useContext(LoginContext);
-
+  const { LoginAction, loginInfo, checkProfileValid } = useContext(LoginContext);
 
   const [inputValues, setInputValues] = useState({
     name: "",
@@ -113,7 +111,7 @@ export function RegisterForm({ navigation }) {
         data: { data },
       } = await axios.post(url, inputValues);
 
-      await LoginAction();
+      await LoginAction("register");
       await loginInfo(data);
 
       await checkProfileValid();
