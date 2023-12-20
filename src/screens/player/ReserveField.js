@@ -71,7 +71,7 @@ function UpcomingReservation({ reservation, field, toggleindicator, leftReservat
         }
       );
     } catch (error) {
-      Toast(error.response.data);
+      Toast.error(error.response.data);
     } finally {
       toggleindicator();
     }

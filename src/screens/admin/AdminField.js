@@ -71,7 +71,7 @@ export const AdminField = ({ route, navigation }) => {
       });
       setSelectedTags(tags.map((tag) => ({ name: tag })));
     } catch (error) {
-      Toast(error.response?.data.message);
+      Toast.error(error.response?.data.message);
     }
   }
 

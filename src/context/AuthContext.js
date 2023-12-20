@@ -16,10 +16,12 @@ export const LoginProvider = ({ children }) => {
   const [userInfo, setUserInfo] = useState(null);
   const [isProfileValid, setIsProfileValid] = useState(false);
 
+
   async function LoginAction(value) {
     try {
       setIsLoggedIn(true);
       if (value === "register") {
+        console.log('REGISTER!!!!!');
         await SecureStore.deleteItemAsync("profileValid");
         setIsProfileValid(false);
       } else {
