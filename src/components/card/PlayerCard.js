@@ -60,7 +60,6 @@ export const PlayerNormalCard = ({ player }) => {
   const { userInfo } = useContext(LoginContext);
   const token = userInfo.access_token;
   const addFriend = async(targetPlayerId) => {
-    console.log(targetPlayerId);
     try {
       await axios.post(
         `${BASE_URL}/friends`,

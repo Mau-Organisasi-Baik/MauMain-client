@@ -32,7 +32,7 @@ export function LoginForm({ navigation }) {
         data: { data },
       } = await axios.post(url, inputValues);
 
-      await LoginAction();
+      await LoginAction('register');
       await loginInfo(data);
     } catch (error) {
    
@@ -75,7 +75,6 @@ export function LoginForm({ navigation }) {
         className="mt-8"
         onPress={() => {
           navigation.navigate("Register");
-          console.log("anc");
         }}
       >
         <Text className="text-white text-center">Don't have an account?</Text>

@@ -56,7 +56,6 @@ import axios from "axios";
 
 export const InviteFriendModal = ({fieldId, setModalVisible, modalVisible}) => {
     const {userInfo} = useContext(LoginContext)
-    console.log(fieldId, 'ini field idnya');
     const [friends, setFriends] = useState([])
     const [inviteeId, setInviteeId] = useState(null)
     const token = userInfo.access_token
@@ -85,13 +84,11 @@ export const InviteFriendModal = ({fieldId, setModalVisible, modalVisible}) => {
             Authorization: "Bearer " + token,
           },
         });
-        console.log(data, 'msk');
       }
     
       useEffect(() => {
         fetchData();
       }, []);
-      console.log(inviteeId);
     return (
         <>
        <Modal

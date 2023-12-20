@@ -18,7 +18,6 @@ export const Schedules = ({ navigation }) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    // console.log(data.data);
     const timeString2Date = (string) => {
       let regExTime = /([0-9]?[0-9]):([0-9][0-9])/;
       let regExTimeArr = regExTime.exec(string);
