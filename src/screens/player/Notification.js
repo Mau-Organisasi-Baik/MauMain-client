@@ -30,7 +30,7 @@ const NotificationPopup = () => {
       });
       setInvitation(data.data.invitations);
     } catch (error) {
-      TOAST.error(error.response.data);
+      TOAST.error(error.response?.data.message);
     }
   };
   //---------
@@ -45,7 +45,7 @@ const NotificationPopup = () => {
       });
       setFriendRequest(data.data.pendings);
     } catch (error) {
-      throw error;
+      TOAST.error(error.response?.data.message);
     }
   };
 

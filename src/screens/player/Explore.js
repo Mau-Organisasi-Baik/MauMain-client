@@ -7,6 +7,7 @@ import axios from "axios";
 import * as Location from "expo-location";
 import CategoryFilter from "../../components/CategoryFilter";
 import { LoginContext } from "../../context/AuthContext";
+import { Toast } from "toastify-react-native";
 
 const customMapStyle = [
   {
@@ -83,8 +84,8 @@ export const Explore = () => {
 
       const fieldsResult = data.fields;
       setFields(fieldsResult);
-    } catch (e) {
-      console.log(e);
+    } catch (error) {
+      Toast.error(error.response?.data.message);
     }
   }
 

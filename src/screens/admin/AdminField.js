@@ -48,6 +48,8 @@ export const AdminField = ({ route, navigation }) => {
       const token = userInfo.access_token;
       if (!token) return;
 
+      console.log(token, "<<<");
+
       const {
         data: { data },
       } = await axios.get(url, {
@@ -145,13 +147,17 @@ export const AdminField = ({ route, navigation }) => {
       });
 
       const url = `${BASE_URL}/admin/profile`;
-      await axios.post(url, formData, {
-        headers: {
-          Authorization: "Bearer " + userInfo.access_token,
-          "Content-Type": "multipart/form-data",
-          Accept: "application/json",
-        },
-      });
+      try {
+        await axios.post(url, formData, {
+          headers: {
+            Authorization: "Bearer " + userInfo.access_token,
+            "Content-Type": "multipart/form-data",
+            Accept: "application/json",
+          },
+        });
+      } catch (error) {
+        Toast.error(error.response?.data.message);
+      }
 
       checkProfileValid();
       Toast.success("Profile created successfully");

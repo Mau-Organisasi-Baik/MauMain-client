@@ -36,7 +36,7 @@ export const InputScoreModal = ({setModalVisible, modalVisible, reservationId, c
             changeIndicator()
         }
         catch(error) {
-            Toast.error(error.response.data.message);
+      Toast.error(error.response?.data.message);
         }
     }
     return (

@@ -17,7 +17,7 @@ const CategoryFilter = ({ selectedTag, changeTag }) => {
 
       setTags([{ name: "All" }, ...data.tags]);
     } catch (error) {
-      Toast.error(error.message);
+      Toast.error(error.response?.data.message);
     }
   }
 

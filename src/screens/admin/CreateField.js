@@ -123,8 +123,6 @@ export const CreateField = ({ navigation, route }) => {
       checkProfileValid();
       Toast.success("Profile created successfully");
     } catch (error) {
-      console.log(error);
-
       Toast.error(error.response?.data.message);
     }
   }

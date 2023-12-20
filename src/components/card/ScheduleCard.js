@@ -23,7 +23,7 @@ export const ScheduleCard = ({schedule, setSchedules}) => {
       TOAST.success('Delete Succeed!')
       setSchedules(previousSchedule => previousSchedule.filter(prevSchedule => prevSchedule._id !== schedule._id))
     } catch (error) {
-      throw error
+      TOAST.error(error.response?.data.message);
     }
   }
     return (

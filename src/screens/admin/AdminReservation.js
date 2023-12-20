@@ -13,7 +13,7 @@ export const AdminReservation = () => {
 
   const { userInfo } = useContext(LoginContext);
 
-  const token = userInfo.access_token;
+  let token = userInfo.access_token;
 
   const asyncFn = async () => {
     try {
@@ -22,10 +22,12 @@ export const AdminReservation = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-  
+
+      console.log(data);
+
       setReservations(data.data.reservations);
     } catch (error) {
-      Toast.error(error.response.data.message)
+      Toast.error(error.response?.data.message);
     }
   };
 
@@ -35,6 +37,8 @@ export const AdminReservation = () => {
 
   useFocusEffect(
     useCallback(() => {
+      console.log(token);
+      token = userInfo.access_token;
       asyncFn();
       return () => {};
     }, [])

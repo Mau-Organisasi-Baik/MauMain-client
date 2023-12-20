@@ -42,7 +42,7 @@ export default function ChatComponent({ route }) {
       if (data2) setOtherUser(data2.user);
       setChatReady(true);
     } catch (error) {
-      Toast.error(error.response.data.message);
+      Toast.error(error.response?.data.message);
     }
   };
 

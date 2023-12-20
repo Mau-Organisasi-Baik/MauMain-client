@@ -5,6 +5,7 @@ import { HistoryScroll } from "../../components/HistoryScroll";
 import { LoginContext } from "../../context/AuthContext";
 import { useContext, useState, useEffect } from "react";
 import axios from "axios";
+import { Toast } from "toastify-react-native";
 
 export const Profile = ({ navigation }) => {
   const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
@@ -22,15 +23,19 @@ export const Profile = ({ navigation }) => {
     const asyncFn = async () => {
       const token = userInfo.access_token;
 
-      const {
-        data: { data },
-      } = await axios.get(`${BASE_URL}/profile`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      try {
+        const {
+          data: { data },
+        } = await axios.get(`${BASE_URL}/profile`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-      setProfileData(data.user);
+        setProfileData(data.user);
+      } catch (error) {
+        Toast.error(error.response?.data.message);
+      }
     };
     asyncFn();
   }, []);

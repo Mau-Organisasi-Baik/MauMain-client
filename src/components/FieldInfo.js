@@ -3,6 +3,7 @@ import { getScheduleTime } from "../helpers/ScheduleTime";
 
 export const FieldInfo = ({ admin, detailField }) => {
   const backgroundColor = detailField.status === "upcoming" ? "bg-blue-400" : "bg-red-400";
+
   return (
     <>
       <View className="bg-white border border-black rounded-lg my-4 w-full">
@@ -18,7 +19,6 @@ export const FieldInfo = ({ admin, detailField }) => {
           {admin && <View className="my-4" />}
           <Image className="mx-auto rounded-xl w-5/6 h-36 object-cover" source={require("../assets/lapangan.jpg")} />
           <View className="flex-row justify-between items-center p-4">
-            <Text className="text-lg text-black font-bold">{detailField._id}</Text>
             <Text className="px-1 bg-green-300 text-center rounded-lg">{`${detailField.schedule && getScheduleTime(detailField.schedule.TimeStart)} : ${
               detailField.schedule && getScheduleTime(detailField.schedule.TimeEnd)
             }`}</Text>

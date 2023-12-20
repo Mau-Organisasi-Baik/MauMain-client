@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { ScrollView, Animated, Image, View, Text, TouchableOpacity } from "react-native";
 import axios from "axios";
 import { LoginContext } from "../../context/AuthContext";
+import { Toast } from "toastify-react-native";
 
 const BASE_URL = process.env.EXPO_PUBLIC_BASE_URL;
 
@@ -45,18 +46,22 @@ const BottomDrawer = ({ isDrawerOpen, setIsDrawerOpen, fieldId }) => {
   const [fieldDetail, setFieldDetail] = useState(null);
 
   async function fetchFieldDetail() {
-    const url = `${BASE_URL}/fields/${fieldId}`;
+    try {
+      const url = `${BASE_URL}/fields/${fieldId}`;
 
-    const {
-      data: { data },
-    } = await axios.get(url, {
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    });
+      const {
+        data: { data },
+      } = await axios.get(url, {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      });
 
-    const fieldData = data.field;
-    setFieldDetail(fieldData);
+      const fieldData = data.field;
+      setFieldDetail(fieldData);
+    } catch (error) {
+      Toast.error(error.response?.data.message);
+    }
   }
 
   useEffect(() => {

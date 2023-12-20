@@ -26,7 +26,7 @@ export const FriendRequestCard = ({ friendRequest, toggleIndicator }) => {
       TOAST.success(`Accepted!!`);
     } catch (error) {
       console.log(error.response.data);
-      TOAST.error(error.response.data.message);
+      TOAST.error(error.response?.data.message);
     }
   };
 
@@ -41,7 +41,7 @@ export const FriendRequestCard = ({ friendRequest, toggleIndicator }) => {
       toggleIndicator();
       TOAST.success(`Rejected!!`);
     } catch (error) {
-      TOAST.error(error.response.data.message);
+      TOAST.error(error.response?.data.message);
     }
   };
   return (
