@@ -46,9 +46,22 @@ export const Schedules = ({ navigation }) => {
         }}
       />
 
-      <TouchableOpacity onPress={() => navigation.navigate("ScheduleForm")} className="bg-gray-400 p-3 rounded-lg">
-        <Text className="text-center text-white">Tambah Schedule</Text>
-      </TouchableOpacity>
+        <FlatList
+            data={schedules}
+            keyExtractor={item => item.id}
+            renderItem={({ item }) =>  {
+              return (
+                <>
+                <ScheduleCard setSchedules={setSchedules} schedule={item}/>
+                </>
+              )
+            }} 
+        />  
+        
+        <TouchableOpacity onPress={() => navigation.navigate('ScheduleForm')} className="bg-gray-400 p-3 rounded-lg">
+          <Text className="text-center text-white">Tambah Schedule</Text>
+        </TouchableOpacity>
+
     </View>
   );
 };
