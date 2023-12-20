@@ -84,7 +84,7 @@ export function LoginForm({ navigation }) {
 }
 
 export function RegisterForm({ navigation }) {
-  const { LoginAction, loginInfo, checkProfileValid } = useContext(LoginContext);
+  const { LoginAction, loginInfo } = useContext(LoginContext);
 
   const [inputValues, setInputValues] = useState({
     name: "",
@@ -113,8 +113,6 @@ export function RegisterForm({ navigation }) {
 
       await LoginAction("register");
       await loginInfo(data);
-
-      await checkProfileValid();
     } catch (error) {
       console.log(error.response.data);
       if (error.response) {
