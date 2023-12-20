@@ -4,6 +4,19 @@ import { getScheduleTime } from "../../helpers/ScheduleTime";
 
 export const AdminReservationCard = ({ reservation }) => {
   const navigation = useNavigation();
+  let detailButton = (
+    <TouchableOpacity
+      onPress={() => navigation.navigate("AdminDetailReservation", { id: reservation.schedule._id })}
+      className="bg-blue-500 py-2 px-4 rounded-full"
+    >
+      <Text className="text-white font-bold">Details</Text>
+    </TouchableOpacity>
+  )
+  if(reservation.status === "empty") {
+    detailButton = (
+      <></>
+    )
+  }
   return (
     <>
       <View className="mx-4 my-2 p-4 bg-white rounded-lg shadow">
@@ -15,12 +28,7 @@ export const AdminReservationCard = ({ reservation }) => {
           <Text className="text-gray-600">
             {reservation.date}, {getScheduleTime(reservation.schedule.TimeStart)} - {getScheduleTime(reservation.schedule.TimeEnd)}
           </Text>
-          <TouchableOpacity
-            onPress={() => navigation.navigate("AdminDetailReservation", { id: reservation.schedule._id })}
-            className="bg-blue-500 py-2 px-4 rounded-full"
-          >
-            <Text className="text-white font-bold">Details</Text>
-          </TouchableOpacity>
+          {detailButton}
         </View>
         <View className="flex-row">
           <Text className={reservation.status === "ended" ? "bg-red-500 rounded-lg px-2 text-white" : "bg-green-500 rounded-lg px-2 text-white"}>
