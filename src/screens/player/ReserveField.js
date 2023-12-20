@@ -204,7 +204,11 @@ export const ReserveField = ({ route, navigation }) => {
     fetchReservationDetail();
 
     navigation.setOptions({
-      headerRight: () => <Ionicons name={"person-add"} size={24} onPress={() => setModalVisible(true)} />,
+      headerRight: () => (
+        <View style={{ marginRight: 20 }}>
+          <Ionicons name={"person-add"} size={24} onPress={() => setModalVisible(true)} />
+        </View>
+      ),
     });
   }, [changeIndicator]);
 
@@ -222,7 +226,7 @@ export const ReserveField = ({ route, navigation }) => {
           toggleindicator={toggleindicator}
           leftReservation={leftReservation}
         />
-        {modalVisible && <InviteFriendModal fieldId={fieldId} setModalVisible={setModalVisible} modalVisible={modalVisible} />}
+        {modalVisible && <InviteFriendModal reservationId={reservationId} setModalVisible={setModalVisible} modalVisible={modalVisible} />}
       </>
     );
 };
